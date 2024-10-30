@@ -1,15 +1,9 @@
 using UnityEngine;
-/* 
-
-
- */
-
 public class GestionPaladin : MonoBehaviour
 {
-    /* =================================================================================== */
-    /* ==================================== VARIABLES ==================================== */
-    /* =================================================================================== */
-    public float vDeplac; // Variable public float memorisant la vitesse de deplacement du personnage
+    public float vitesseMarche; // Vitesse de marche du personnage
+    public float forceSaut; // Force de saut du personnage
+    public float forceGravite;
 
     // Start is called before the first frame update
     void Start()
@@ -20,18 +14,14 @@ public class GestionPaladin : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {   
-        // Applique les vitesses de deplacement du personnage
-        GetComponent<Rigidbody>().velocity = new Vector3(Input.GetAxisRaw("Horizontal"), GetComponent<Rigidbody>().velocity.y, Input.GetAxisRaw("Vertical")).normalized * vDeplac;
+    {
+        GetComponent<Animator>().SetBool("marche", GetComponent<Rigidbody>().velocity.magnitude > 1f ? true : false);
+    }
 
-        GetComponent<Animator>().SetBool("marche", GetComponent<Rigidbody>().velocity.magnitude > 5 ? true : false);
+    void FixedUpdate()
+    {
+        // Applique les force de deplacement avant et arriere
 
-        // Clique droit souris
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            // Set le trigger de l'attaque
-            GetComponent<Animator>().SetTrigger("attaque");
-        }
-
+        GetComponent<Rigidbody>().velocity = transform.TransformDirection(Input.GetAxisRaw("Horizontal"), forceSaut, Input.GetAxisRaw("Vertical")).normalized * vitesseMarche;
     }
 }

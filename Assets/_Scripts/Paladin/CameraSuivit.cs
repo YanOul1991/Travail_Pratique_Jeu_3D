@@ -5,6 +5,11 @@ public class CameraSuivit : MonoBehaviour
     public GameObject objCamera; // Reference a l'objet camera
     public Vector3 posCamera; // Distance de la camera par rapport au personnage
 
+    void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
     // Update is called once per frame
     void Update()
     {
