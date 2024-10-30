@@ -601,7 +601,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: f7f89946817401649922dd6ab6d8ef20, type: 3}
       propertyPath: m_Name
-      value: Paladin (CharcterController)
+      value: Paladin
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: f7f89946817401649922dd6ab6d8ef20, type: 3}
       propertyPath: m_IsActive
@@ -664,7 +664,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objCamera: {fileID: 963194225}
-  posCamera: {x: 0, y: 3, z: -5}
+  posCamera: {x: 0, y: 2.5, z: -4}
+  VitesseTourne: 5
 --- !u!143 &426410450
 CharacterController:
   m_ObjectHideFlags: 0
@@ -703,8 +704,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f43d86ac115d124099d27d3a4782989, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  VitesseDeplacement: 5
-  VitesseTourne: 5
+  vitesseMarche: 3
+  vitesseSprint: 10
+  VitesseTourne: 10
+  forceSaut: 7
+  forceGravite: -9
 --- !u!1 &512373770
 GameObject:
   m_ObjectHideFlags: 0
@@ -990,8 +994,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: 0.22973894, y: -0.0012790717, z: 0.00030232404, w: 0.97325146}
+  m_LocalPosition: {x: -0.088055044, y: 2.9180398, z: -4.0697937}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1670,8 +1674,8 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 963194228}
   - {fileID: 705507995}
   - {fileID: 1888557187}
   - {fileID: 1592441644}
+  - {fileID: 963194228}
   - {fileID: 426410441}

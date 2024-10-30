@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Travail_Pratique.sln"
+    "dotnet.defaultSolution": "Travail_Pratique_Jeu_3D.sln"
 }
