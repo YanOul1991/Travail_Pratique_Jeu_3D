@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DeplacementPaladin : MonoBehaviour
@@ -77,6 +78,31 @@ public class DeplacementPaladin : MonoBehaviour
         controleur.Move(deplacement * Time.deltaTime);
 
         GestionAnimations(deplacement);
+    }
+
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {   
+        if (hit.gameObject.name == "cube")
+        {
+            // print("CONTACT!!");
+        }
+
+    }
+
+    void OnTriggerEnter(Collider collider)
+    {
+        if (collider.gameObject.name == "hide")
+        {
+            // print("HIDDEN!");
+        }
+    }
+
+    void OnTriggerExit(Collider collider)
+    {
+        if (collider.gameObject.name == "hide")
+        {
+            // print("VISIBLE!!!");
+        }
     }
 
     void GestionAnimations(Vector3 valeurDeplacement)
