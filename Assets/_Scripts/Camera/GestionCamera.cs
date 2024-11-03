@@ -9,25 +9,27 @@ using UnityEngine;
  */
 public class GestionCamera : MonoBehaviour
 {
-    public GameObject joueur; // Position du joueur
-    public Vector3 posCamera; // Distance de la camera par rapport au joueur
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [field: SerializeField] Transform cible; // Reference au component Transform de la cible a suivre
+    [field: SerializeField] Transform pivotCam; // Reference au component Transform du parent de la camera qui sera la pivot
+    [field: SerializeField] float distanceCamera; // float memorisant la distance souhaite de la camera par rapport a la cible
 
     // Update is called once per frame
     void Update()
     {
-        
-    }
+        // Memorise les vecteurs en X et en Y des mouvement de la souris
+        float sourisX = Input.GetAxis("Mouse X");
+        float sourisY = Input.GetAxis("Mouse Y");
 
-    void FixedUpdate()
-    {
-        transform.position = joueur.transform.TransformPoint(posCamera);
+        // Applique les mouvements de rotation de la souris au pivot
+        pivotCam.Rotate(-sourisY, sourisX, 0f);
 
-        transform.LookAt(joueur.transform.position);
+        pivotCam.localEulerAngles = new Vector3(pivotCam.localEulerAngles.x, pivotCam.localEulerAngles.y, 0f);
+
+        // Positionnement du pivot et de la camera
+        pivotCam.position = cible.position + Vector3.up;
+
+        transform.position = pivotCam.position - transform.forward * distanceCamera;
+
+        transform.LookAt(pivotCam);
     }
 }

@@ -7,73 +7,71 @@ using UnityEngine;
         - Animations de deplacement du personnage selon l'etat + deplacement du joueur + sauts avec 'espace'
         
     Par : Yanis Oulmane
-    Derniere modification : 02/11/2024
+    Derniere modification : 03/11/2024
  */
 public class ErikaDeplacement : MonoBehaviour
 {
-    /* =================================================================================================== */
-    /* ================================= VARIABLES DEPLACEMENTS ET SAUTS ================================= */
-    /* =================================================================================================== */
+    /* ================================================================ */
+    /* ================= VARIABLES DEPLACEMENTS/SAUTS ================= */
+    /* ================================================================ */
 
     /* VARIABLES POUR DEPLACEMENTS AU SOL */
-    [SerializeField] float vitesseMarche; // Vitesse du deplacement de type marche
-    [SerializeField] float vitesseJogging; // Vitesse du deplacement de type jogging
-    [SerializeField] float vitesseSprint; // Vitesse du deplacement de type sprint
-    [SerializeField] float vitesseAccroupi; // Vitesse du deplacement lorsque le joueur est en etat accroupi
+    [field: SerializeField] float vitesseMarche; // Vitesse du deplacement de type marche
+    [field: SerializeField] float vitesseJogging; // Vitesse du deplacement de type jogging
+    [field: SerializeField] float vitesseSprint; // Vitesse du deplacement de type sprint
+    [field: SerializeField] float vitesseAccroupi; // Vitesse du deplacement lorsque le joueur est en etat accroupi
     float vitesseReel; // Vitesse qui sera applique au personnage selon son etat
     float velociteX; // Variable memorisant la Velocite en X du personnage
     float velociteZ; // Variable memorisant la Velocite en Y du personnage
+    [field: SerializeField] Transform laCamera; // Reference au component Transform de la camera
+    [field: SerializeField] Transform lePivot; // Reference au component Transform de la camera
 
     /* VARIABLES POUR LES SAUTS */
-    [SerializeField] float forceSaut; // Force de saut du joueur
-    [SerializeField] float forceGravite; // Force de gravite qui sera applique au joueur
+    [field: SerializeField] float forceSaut; // Force de saut du joueur
+    [field: SerializeField] float forceGravite; // Force de gravite qui sera applique au joueur
     private float velociteY; // Variable memorisant la velocite Y du joueur en temps reel;
     private bool auSol; // Bool memorisant si le personnage touche au sol
 
-    /* =================================================================================================== */
-    /* ==================================== REFERENCES AUX COMPONENTS ==================================== */
-    /* =================================================================================================== */
+    /* ================================================================= */
+    /* =================== REFERENCES AUX COMPONENTS =================== */
+    /* ================================================================= */
     CharacterController controleur;
     Animator animator;
 
     // Start is called before the first frame update
     void Start()
     {
-        /*=============== Assignations des references des components ===============*/
+        // Assigniation des references aux components
         controleur = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
-
-        /* ======================================================================== */
-
-        // Par defaut verouille le curseur au centre de l'ecran
-        Cursor.lockState = CursorLockMode.Locked;
     }
 
     // Fonction Update() gere les Inputs du joueurs et les etats du personnage  
     void Update()
     {
         // Si le joueur appuit sur la 'espace' et qu'il est au sol
+        // Applique la force de saut au deplacement en Y et Strigger le parametre saut de l'animator
         if (Input.GetKeyDown(KeyCode.Space) && auSol)
         {
-            // Applique la force de saut a la velociteY du personnage
             velociteY = forceSaut;
-
-            // Set le Trigger de saut de l'animator
             animator.SetTrigger("saut");
         }
 
-        // Vitesse reel = vitesse de marche par defaut
+        // Par defaut la vitesse reel sera la vitesse de marche
+        // Si la touche 'ctrl' de gauche est appuiye alors la vitesse accroupi sera applique
+        // Si la touche 'shift' de gauche est appuye -> vitesse de sprint est applique et
+        // ecrase vitesse accroupi si 'ctrl' et 'shift' sont appuye en meme temps
+
         vitesseReel = vitesseMarche;
 
-        // 
         if (Input.GetKey(KeyCode.LeftControl))
         {
             vitesseReel = vitesseAccroupi;
         }
 
-        animator.SetBool("accroupi", Input.GetKey(KeyCode.LeftControl) ? true : false);
         
-        // Si le joueur appuit sur le shift gauche
+        animator.SetBool("accroupi", Input.GetKey(KeyCode.LeftControl) && !Input.GetKey(KeyCode.LeftShift) ? true : false);
+        
         if (Input.GetKey(KeyCode.LeftShift))
         {
             vitesseReel = vitesseSprint;
@@ -83,34 +81,29 @@ public class ErikaDeplacement : MonoBehaviour
     // Fonction FixedUpdate gere les deplacements des objets et les animations
     void FixedUpdate()
     {
-        /* ======================= DEPLACEMENTS ET DES SAUTS ======================= */
-        // Si le personnage est au sol
-        if (auSol)
-        {
-            // Permet la modifications des velocite X et Z du personnage
-            velociteX = Input.GetAxisRaw("Horizontal");
-            velociteZ = Input.GetAxisRaw("Vertical");
-        }
-
-        // Quand le joueur touche le sol avec un velocite en Y negative
-        if (auSol && velociteY < 0)
-        {
-            // Remet la velocite en Y a 0
-            velociteY = 0;
-        }
-
-        // Applique la force de gravite quand le joueur est dans les airs
-        if (!auSol)
-        {
-            velociteY += forceGravite * Time.deltaTime;
-        }
-
-        // Variable locale Vector3 qui memorisera le vecteur de deplacement du personnage
-        Vector3 deplacement = transform.TransformDirection(new Vector3(velociteX, 0, velociteZ).normalized * vitesseReel);
-
-        // Verifie si le personnage touche au sol 
+        // Verification de la collision avec le sol avec un SphereCast place aux pieds du personnage
+        // Verifie si ce SphereCast entre en collision
         RaycastHit collisionSphereCast;
         auSol = Physics.SphereCast(transform.position + new Vector3(0f, 0.3f, 0f), 0.3f, Vector3.down, out collisionSphereCast, 0.3f);
+
+        // Permet les modifications des deplacement en X et Z du personnage seuelemt si il touche au sol
+        // Fix la velocite en Y a la force de gravite, pour evite qu'elle continue de trop baisser
+        if (auSol)
+        {
+            velociteX = Input.GetAxisRaw("Horizontal");
+            velociteZ = Input.GetAxisRaw("Vertical");
+
+            if (velociteY < forceGravite)
+            {
+                velociteY = forceGravite;
+            }
+        }
+
+        Vector3 mouvSol = Vector3.zero + (laCamera.forward * velociteZ) + (laCamera.right * velociteX);
+
+        Vector3 deplacement = transform.TransformDirection(new Vector3(mouvSol.x, 0, mouvSol.z).normalized * vitesseReel);
+
+        velociteY += forceGravite * Time.deltaTime;
 
         deplacement.y = velociteY;
 
@@ -127,14 +120,10 @@ public class ErikaDeplacement : MonoBehaviour
         animator.SetBool("auSol", auSol);
 
         /* ==================== ANIMATIONS DE DEPLACEMENT AU SOL ==================== */
-        // Recupere le parametre deplacementSol et assigne la valeur de 0 a son vecteur Y
-        // pour seulement verifier les deplacements en X et en Z
+        // Verifie les deplacement en X et Z seuelement
         deplacementSol.y = 0;
 
-        animator.SetFloat("vitesse", Mathf.Floor(deplacementSol.magnitude));
- 
-        /* ================== DEBUGS ================== */
-        // UnityEngine.Debug.Log(Mathf.Floor(deplacementSol.magnitude ));
+        animator.SetFloat("vitesse", deplacementSol.magnitude);
     }
 
     /*====================== DEBUGS====================== */
