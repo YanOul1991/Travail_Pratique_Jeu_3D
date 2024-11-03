@@ -23,7 +23,6 @@ public class ErikaDeplacement : MonoBehaviour
     float vitesseReel; // Vitesse qui sera applique au personnage selon son etat
     float velociteX; // Variable memorisant la Velocite en X du personnage
     float velociteZ; // Variable memorisant la Velocite en Y du personnage
-    bool estAccroupi ; // Variable memorisant si le personnag est accroupi
 
     /* VARIABLES POUR LES SAUTS */
     [SerializeField] float forceSaut; // Force de saut du joueur
@@ -71,6 +70,8 @@ public class ErikaDeplacement : MonoBehaviour
         {
             vitesseReel = vitesseAccroupi;
         }
+
+        animator.SetBool("accroupi", Input.GetKey(KeyCode.LeftControl) ? true : false);
         
         // Si le joueur appuit sur le shift gauche
         if (Input.GetKey(KeyCode.LeftShift))
@@ -129,18 +130,11 @@ public class ErikaDeplacement : MonoBehaviour
         // Recupere le parametre deplacementSol et assigne la valeur de 0 a son vecteur Y
         // pour seulement verifier les deplacements en X et en Z
         deplacementSol.y = 0;
-        
-        // Pour chacun des parametre de deplacement, verifie si la vitesse de deplacement du personnage == a un etat de vitesse.
-        // Arrondi la magnitude a nombre entier en dessous
 
-
-        animator.SetBool("marche", Mathf.Floor(deplacementSol.magnitude ) == vitesseMarche ? true : false);    
-        animator.SetBool("sprint", Mathf.Floor(deplacementSol.magnitude ) == vitesseSprint ? true : false);    
-        animator.SetBool("accroupi", Mathf.Floor(deplacementSol.magnitude ) == vitesseAccroupi ? true : false);    
-
-
+        animator.SetFloat("vitesse", Mathf.Floor(deplacementSol.magnitude));
+ 
         /* ================== DEBUGS ================== */
-        UnityEngine.Debug.Log(Mathf.Floor(deplacementSol.magnitude ));
+        // UnityEngine.Debug.Log(Mathf.Floor(deplacementSol.magnitude ));
     }
 
     /*====================== DEBUGS====================== */
