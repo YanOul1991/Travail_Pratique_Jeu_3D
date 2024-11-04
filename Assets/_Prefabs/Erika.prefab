@@ -14,7 +14,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cd3fdbab0449e7743b2324b6894cfb9a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.434
+      value: 0.84
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cd3fdbab0449e7743b2324b6894cfb9a, type: 3}
       propertyPath: m_LocalPosition.y
@@ -22,7 +22,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cd3fdbab0449e7743b2324b6894cfb9a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.6
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cd3fdbab0449e7743b2324b6894cfb9a, type: 3}
       propertyPath: m_LocalRotation.w
@@ -156,6 +156,5 @@ MonoBehaviour:
   vitesseSprint: 7
   vitesseAccroupi: 1
   laCamera: {fileID: 0}
-  lePivot: {fileID: 0}
   forceSaut: 7
-  forceGravite: -30
+  forceGravite: -15
