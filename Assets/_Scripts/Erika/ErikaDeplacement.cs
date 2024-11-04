@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using UnityEngine;
 /* 
     Script des gestion des deplacements du joueur ayant les fonctionalites suivantes : 
@@ -21,10 +20,9 @@ public class ErikaDeplacement : MonoBehaviour
     [field: SerializeField] float vitesseSprint; // Vitesse du deplacement de type sprint
     [field: SerializeField] float vitesseAccroupi; // Vitesse du deplacement lorsque le joueur est en etat accroupi
     float vitesseReel; // Vitesse qui sera applique au personnage selon son etat
-    float velociteX; // Variable memorisant la Velocite en X du personnage
-    float velociteZ; // Variable memorisant la Velocite en Y du personnage
+    float horizontal; // Variable memorisant la Velocite en X du personnage
+    float vertical; // Variable memorisant la Velocite en Y du personnage
     [field: SerializeField] Transform laCamera; // Reference au component Transform de la camera
-    [field: SerializeField] Transform lePivot; // Reference au component Transform de la camera
 
     /* VARIABLES POUR LES SAUTS */
     [field: SerializeField] float forceSaut; // Force de saut du joueur
@@ -90,28 +88,66 @@ public class ErikaDeplacement : MonoBehaviour
         // Fix la velocite en Y a la force de gravite, pour evite qu'elle continue de trop baisser
         if (auSol)
         {
-            velociteX = Input.GetAxisRaw("Horizontal");
-            velociteZ = Input.GetAxisRaw("Vertical");
+            horizontal = Input.GetAxisRaw("Horizontal");
+            vertical = Input.GetAxisRaw("Vertical");
 
             if (velociteY < forceGravite)
             {
-                velociteY = forceGravite;
+                velociteY = 0;
             }
         }
 
-        Vector3 mouvSol = Vector3.zero + (laCamera.forward * velociteZ) + (laCamera.right * velociteX);
+        // Vector3 mouvSol = Vector3.zero + (laCamera.forward * vertical) + (laCamera.right * horizontal);
 
-        Vector3 deplacement = transform.TransformDirection(new Vector3(mouvSol.x, 0, mouvSol.z).normalized * vitesseReel);
+        // Vector3 deplacement = transform.TransformDirection(new Vector3(mouvSol.x, 0, mouvSol.z).normalized * vitesseReel);
 
+        // velociteY += forceGravite * Time.deltaTime;
+
+        // deplacement.y = velociteY;
+
+        // controleur.Move(deplacement * Time.deltaTime);
+
+        // GestionAnimations(deplacement);
+
+        /* ====================================================== */
+        /* ==================== ZONE DE TEST ==================== */
+        /* ====================================================== */
+
+        // Vector3 cameraDevant = laCamera.forward;
+        // Vector3 cameraDroite = laCamera.right;
+
+        // cameraDevant.y = 0;
+        // cameraDroite.y = 0;
+
+        // Vector3 mouvDevantRelatif = cameraDevant * vertical;
+        // Vector3 mouvDroiteRelatif = cameraDroite * horizontal;
+
+        /* 
+            APPLICATION DES MOUVEMENTS AUX PERSONNAGE SELON L'ANGLE DE LA CAMERA
+
+            - Transforme les vecteurs de la camera en vecteur gloable
+            - Change le vecteur en Y a 0 pour que le vecteur sultant soit parfaitement a l'horizontal
+            - Et normalize le vecteur pour qu'il pointe dans la bonne direction avec un valeur de 1
+        */
+
+        Vector3 mouvRelatif = laCamera.forward * vertical + laCamera.right * horizontal;
+        mouvRelatif.y = 0;
+        mouvRelatif = mouvRelatif.normalized * vitesseReel;
+
+        if (auSol && mouvRelatif != Vector3.zero)
+        {            
+            transform.forward = mouvRelatif.normalized;
+        }
+
+        // Applique la velocite en Y au vecteur de mouvementRelatif
         velociteY += forceGravite * Time.deltaTime;
+        mouvRelatif.y = velociteY;
+        
+        // Applique le mouvement au personnage avec la methode Move() de son compoenent CharacterController
+        controleur.Move(mouvRelatif * Time.deltaTime);
 
-        deplacement.y = velociteY;
-
-        controleur.Move(deplacement * Time.deltaTime);
-
-        GestionAnimations(deplacement);
-
-        /* ================================= DEBUG ================================= */
+        // Envoit le vecteur mouvement relatif a la fonction de gestion des animations
+        GestionAnimations(mouvRelatif);
     }   
 
     void GestionAnimations(Vector3 deplacementSol)
@@ -126,7 +162,7 @@ public class ErikaDeplacement : MonoBehaviour
         animator.SetFloat("vitesse", deplacementSol.magnitude);
     }
 
-    /*====================== DEBUGS====================== */
+    /* DEBUGGAGE DES RAYCASTS */
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;

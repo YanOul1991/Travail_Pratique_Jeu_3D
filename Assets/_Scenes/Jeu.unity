@@ -5135,7 +5135,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2190571004137368042, guid: 18aca75c61e4ef446a75baea5d6931ad, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5814026484782598466, guid: 18aca75c61e4ef446a75baea5d6931ad, type: 3}
       propertyPath: lePivot
@@ -5145,6 +5145,10 @@ PrefabInstance:
       propertyPath: laCamera
       value: 
       objectReference: {fileID: 963194228}
+    - target: {fileID: 5814026484782598466, guid: 18aca75c61e4ef446a75baea5d6931ad, type: 3}
+      propertyPath: forceGravite
+      value: -15
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
