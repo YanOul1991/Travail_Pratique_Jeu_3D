@@ -6,36 +6,31 @@ using UnityEngine;
         - Animations de deplacement du personnage selon l'etat + deplacement du joueur + sauts avec 'espace'
         
     Par : Yanis Oulmane
-    Derniere modification : 04/11/2024
+    Derniere modification : 06/11/2024
  */
 public class ErikaDeplacement : MonoBehaviour
 {
-    [SerializeField] bool estCache = true;
-    [SerializeField] bool estMort = false;
-    /* ================================================================ */
+
     /* ================= VARIABLES DEPLACEMENTS/SAUTS ================= */
-    /* ================================================================ */
-
-
-    /* VARIABLES POUR DEPLACEMENTS AU SOL */
     [SerializeField] float vitesseMarche; // Vitesse du deplacement de type marche
     [SerializeField] float vitesseJogging; // Vitesse du deplacement de type jogging
     [SerializeField] float vitesseSprint; // Vitesse du deplacement de type sprint
     [SerializeField] float vitesseAccroupi; // Vitesse du deplacement lorsque le joueur est en etat accroupi
-    float vitesseReel; // Vitesse qui sera applique au personnage selon son etat
-    float horizontal; // Variable memorisant la Velocite en X du personnage
-    float vertical; // Variable memorisant la Velocite en Y du personnage
-    [SerializeField] Transform laCamera; // Reference au component Transform de la camera
-
-    /* VARIABLES POUR LES SAUTS */
     [SerializeField] float forceSaut; // Force de saut du joueur
     [SerializeField] float forceGravite; // Force de gravite qui sera applique au joueur
-    private float velociteY; // Variable memorisant la velocite Y du joueur en temps reel;
-    private bool auSol; // Bool memorisant si le personnage touche au sol
+    [SerializeField] Transform laCamera; // Reference au component Transform de la camera
+    float vitesseReel; // Vitesse qui sera applique au personnage selon son etat
+    float mouvHorizontal; // Variable memorisant la Velocite en X du personnage
+    float mouvVertical; // Variable memorisant la Velocite en Y du personnage
+    float velociteY; // Variable memorisant la velocite Y du joueur en temps reel;
+    bool auSol; // Bool memorisant si le personnage touche au sol
 
-    /* ================================================================= */
+    /* ===================  VARIABLES ETAT PERSONNAGE ===================  */
+    [SerializeField] bool estCache = true; // Bool memorisant si le personnage est cache
+    [SerializeField] bool estMort = false; // Bool memorisant si le personnag est mort
+
+
     /* =================== REFERENCES AUX COMPONENTS =================== */
-    /* ================================================================= */
     CharacterController controleur;
     Animator animator;
 
@@ -51,6 +46,7 @@ public class ErikaDeplacement : MonoBehaviour
     void Update()
     {
         // Assigne la valeur de estCache a la variable joueurCache du GAMEMANAGER
+        // Serviront a gerer des elements du UI et la partie en generale
         GAMEMANAGER.joueurCache = estCache;
         GAMEMANAGER.joueurMort = estMort;
 
@@ -97,8 +93,8 @@ public class ErikaDeplacement : MonoBehaviour
         // Fix la velocite en Y a la force de gravite, pour evite qu'elle continue de trop baisser
         if (auSol && !estMort)
         {
-            horizontal = Input.GetAxisRaw("Horizontal");
-            vertical = Input.GetAxisRaw("Vertical");
+            mouvHorizontal = Input.GetAxisRaw("Horizontal");
+            mouvVertical = Input.GetAxisRaw("Vertical");
 
             if (velociteY < forceGravite)
             {
@@ -106,15 +102,21 @@ public class ErikaDeplacement : MonoBehaviour
             }
         }
 
-        /* 
-            APPLICATION DES MOUVEMENTS AUX PERSONNAGE SELON L'ANGLE DE LA CAMERA
+        // Si le joueur est il n'a plus de deplacement au sol, il ne peut que tomber
+        if (estMort)
+        {
+            vitesseReel = 0;
+        }
 
+        /* 
+            ---- APPLICATION DES MOUVEMENTS AUX PERSONNAGE SELON L'ANGLE DE LA CAMERA ---- 
+            
             - Transforme les vecteurs de la camera en vecteur gloable
             - Change le vecteur en Y a 0 pour que le vecteur sultant soit parfaitement a l'horizontal
             - Et normalize le vecteur pour qu'il pointe dans la bonne direction avec un valeur de 1
         */
 
-        Vector3 mouvRelatif = laCamera.forward * vertical + laCamera.right * horizontal;
+        Vector3 mouvRelatif = laCamera.forward * mouvVertical + laCamera.right * mouvHorizontal;
         mouvRelatif.y = 0;
         mouvRelatif = mouvRelatif.normalized * vitesseReel;
 
@@ -134,14 +136,38 @@ public class ErikaDeplacement : MonoBehaviour
         GestionAnimations(mouvRelatif);
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider collision)
     {
-        if (other.gameObject.name == "epee")
+        // Lorsque le joueur se fait frappe par l'epee d'un paladin 
+        // le joueur meurt
+        if (collision.gameObject.name == "epee" && !estMort)
         {
-            Debug.Log("OUCH !!!");
-        }
+            estMort = true;
 
-        estMort = true;
+            animator.SetTrigger("mortTrigger");
+        }
+    }
+
+    void OnTriggerStay(Collider collision)
+    {
+        // lorsque le personnage reste dans le Trigger d'un object qui possede le tag 'lumiereRevele'
+        // Il n'est plus cache et donc le rend suseptible d'etre vu par les ennemies
+        if (collision.gameObject.tag == "lumiereRevele")
+        {
+            estCache = false;
+            Debug.Log("Personnage est toujours dans la lumiere");
+        }
+    }
+
+    void OnTriggerExit(Collider collision)
+    {
+        // Si il quite toutes les zones qui genere de la lumiere
+        if (collision.gameObject.tag == "lumiereRevele")
+        {
+            // Le personnage redevient cache
+            estCache = true;
+            Debug.Log("Personnage est cache");
+        }
     }
 
     void GestionAnimations(Vector3 deplacementSol)
@@ -154,11 +180,6 @@ public class ErikaDeplacement : MonoBehaviour
         deplacementSol.y = 0;
 
         animator.SetFloat("vitesse", deplacementSol.magnitude);
-
-        if (estMort)
-        {
-            animator.SetBool("mort", true);
-        }
     }
 
     /* DEBUGGAGE DES RAYCASTS */

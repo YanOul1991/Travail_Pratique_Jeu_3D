@@ -11,10 +11,8 @@ public class PaladinDeplacement : MonoBehaviour
     /* ================================ VARIABLES ================================ */
     [SerializeField] Transform posCible; // Reference au componenent Transform d'une cible que le Paladin regardera;
     [SerializeField] float vitesseCourse; // Variable memorisant la vitesse de course du Paladin
-    
     public bool joueurDansVision;
     private float vitesseReel; // Vitesse qui sera applique au mouvemen du personnage
-
     CharacterController controlleurPerso;
     Animator animateur;
     /* =========================================================================== */
@@ -37,7 +35,6 @@ public class PaladinDeplacement : MonoBehaviour
         // Par defaut le paladin ne se deplace pas
         Vector3 mouvement = Vector3.zero;
 
-        
         // Applique un force de gravite au paladin a chaque seconde
         float velociteY = 0;
         velociteY += -10 * Time.deltaTime;
@@ -68,8 +65,6 @@ public class PaladinDeplacement : MonoBehaviour
         // Applique la somme des mouvements au CharacterController
         mouvement.y = velociteY;
         controlleurPerso.Move(mouvement * Time.deltaTime);
-
-        // Debug.Log(Vector3.Distance(posCible.position, transform.position));
     }
 
     void GestionAnimDeplacement(Vector3 mouvSol)
