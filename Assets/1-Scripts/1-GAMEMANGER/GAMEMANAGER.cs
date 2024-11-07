@@ -2,10 +2,10 @@ using UnityEngine;
 
 /* 
     Scripte de gestions des fonctionalites globales du jeu :
-        * FONCTIONALITES A VENIR *
+        - Memoriser les etats du joueurs
     
     Par Yanis Oulmane
-    Derniere modification : 03/11/2024
+    Derniere modification : 06/11/2024
  */
 public class GAMEMANAGER : MonoBehaviour
 {
@@ -25,6 +25,6 @@ public class GAMEMANAGER : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Debug.Log(joueurCache);
+        
     }
 }

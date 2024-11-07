@@ -1,19 +1,19 @@
 using UnityEngine;
 /* 
     Script des gestion des deplacements du joueur ayant les fonctionalites suivantes : 
-        - Etats debout/accroupi du joueur avec la touche 'ctrl' gauche;
-        - Variations de vitesse deplacement selon l'etat du joueur + sprint avec 'shift' gauche
-        - Animations de deplacement du personnage selon l'etat + deplacement du joueur + sauts avec 'espace'
-        
+        - Gestion des etats du joueur (cache/visible, vivant/mort, etc.) et partage ces information avec le gamemanager
+        - Gestion des etats physiques du personnages tels que debout/accroupi et marche/sprint
+        - Gestion des vitesses de deplacement selon l'etat du physique du personnage
+        - Gestion des sauts
+        - Gestion des animations du personnage selons les etats *** TEMPORAIRE -> SERA DEPLACE DANS UN AUTRES SCRIPTE ***
+
     Par : Yanis Oulmane
     Derniere modification : 06/11/2024
  */
 public class ErikaDeplacement : MonoBehaviour
 {
-
     /* ================= VARIABLES DEPLACEMENTS/SAUTS ================= */
     [SerializeField] float vitesseMarche; // Vitesse du deplacement de type marche
-    [SerializeField] float vitesseJogging; // Vitesse du deplacement de type jogging
     [SerializeField] float vitesseSprint; // Vitesse du deplacement de type sprint
     [SerializeField] float vitesseAccroupi; // Vitesse du deplacement lorsque le joueur est en etat accroupi
     [SerializeField] float forceSaut; // Force de saut du joueur
@@ -45,10 +45,16 @@ public class ErikaDeplacement : MonoBehaviour
     // Fonction Update() gere les Inputs du joueurs et les etats du personnage  
     void Update()
     {
-        // Assigne la valeur de estCache a la variable joueurCache du GAMEMANAGER
-        // Serviront a gerer des elements du UI et la partie en generale
+
+        /* ======================= ENVOIT INFOS IMPORTANTES AU GAMEMANAGER ======================= */
+        /* 
+            - Etat cache/visible
+            - Etat mort/vivant
+        */
         GAMEMANAGER.joueurCache = estCache;
         GAMEMANAGER.joueurMort = estMort;
+
+        /* ================================ INPUTS DEPLACEMENT/SAUTS ================================ */
 
         if (!estMort)
         {
@@ -79,13 +85,16 @@ public class ErikaDeplacement : MonoBehaviour
                 vitesseReel = vitesseSprint;
             }
         }
+        else
+        {
+            // Si le personnage est mort la vitesse de deplacement envoyee sera automatiquement de 0
+            vitesseReel = 0;
+        }
     }
-
-    // Fonction FixedUpdate gere les deplacements des objets et les animations
+    
     void FixedUpdate()
     {
-        // Verification de la collision avec le sol avec un SphereCast place aux pieds du personnage
-        // Verifie si ce SphereCast entre en collision
+        // Verification du contacte avec le sol avec un spherecast place aux pieds du personnage
         RaycastHit collisionSphereCast;
         auSol = Physics.SphereCast(transform.position + new Vector3(0f, 0.3f, 0f), 0.3f, Vector3.down, out collisionSphereCast, 0.3f);
 
@@ -102,24 +111,19 @@ public class ErikaDeplacement : MonoBehaviour
             }
         }
 
-        // Si le joueur est il n'a plus de deplacement au sol, il ne peut que tomber
-        if (estMort)
-        {
-            vitesseReel = 0;
-        }
-
         /* 
-            ---- APPLICATION DES MOUVEMENTS AUX PERSONNAGE SELON L'ANGLE DE LA CAMERA ---- 
-            
-            - Transforme les vecteurs de la camera en vecteur gloable
-            - Change le vecteur en Y a 0 pour que le vecteur sultant soit parfaitement a l'horizontal
-            - Et normalize le vecteur pour qu'il pointe dans la bonne direction avec un valeur de 1
+            APPLICATION DES MOUVEMENTS AUX PERSONNAGE SELON L'ANGLE DE LA CAMERA : 
+                - Transforme les vecteurs de la camera en vecteur gloable
+                - Change le vecteur en Y a 0 pour que le vecteur sultant soit parfaitement a l'horizontal
+                - Et normalize le vecteur pour qu'il pointe dans la bonne direction avec un valeur de 1
         */
 
         Vector3 mouvRelatif = laCamera.forward * mouvVertical + laCamera.right * mouvHorizontal;
         mouvRelatif.y = 0;
         mouvRelatif = mouvRelatif.normalized * vitesseReel;
 
+        // Le personnage regardera vers la direction approprie 
+        // Si il est au sol et qu'il y a un deplacement
         if (auSol && mouvRelatif != Vector3.zero)
         {
             transform.forward = mouvRelatif.normalized;
@@ -136,6 +140,7 @@ public class ErikaDeplacement : MonoBehaviour
         GestionAnimations(mouvRelatif);
     }
 
+    // 
     void OnTriggerEnter(Collider collision)
     {
         // Lorsque le joueur se fait frappe par l'epee d'un paladin 

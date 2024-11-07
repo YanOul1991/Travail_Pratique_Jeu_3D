@@ -2,10 +2,11 @@ using UnityEngine;
 
 /* 
     Script de gestion de la camera du jeu, gerant les fonctionalites suivantes : 
-        - Bla bla bla
+        - Suivre la position d'une cible
+        - Tourner autour de la cible en gardant un certain distance
 
     Par Yanis Oulmane
-    Derniere modification : 02/11/2024
+    Derniere modification : 06/11/2024
  */
 public class GestionCamera : MonoBehaviour
 {

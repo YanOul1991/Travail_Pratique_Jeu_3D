@@ -2207,6 +2207,10 @@ PrefabInstance:
       propertyPath: laCamera
       value: 
       objectReference: {fileID: 963194228}
+    - target: {fileID: 5814026484782598466, guid: 18aca75c61e4ef446a75baea5d6931ad, type: 3}
+      propertyPath: leGameManager
+      value: 
+      objectReference: {fileID: 1279774106}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

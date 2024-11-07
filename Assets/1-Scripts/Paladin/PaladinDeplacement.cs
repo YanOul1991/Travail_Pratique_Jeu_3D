@@ -1,6 +1,8 @@
 using UnityEngine;
 /* 
-    Scripte de gestion des deplacements d'un Paladin
+    Scripte de gestion des deplacements d'un Paladin :
+        - Gestion des vitesses et des animations
+        - Gestin des rotation selon cible que le paladin va suivre
 
     Par Yanis Oulmane
     Derniere modification : 04-11-2024
