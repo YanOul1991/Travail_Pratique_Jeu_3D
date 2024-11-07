@@ -26,8 +26,8 @@ public class ErikaDeplacement : MonoBehaviour
     bool auSol; // Bool memorisant si le personnage touche au sol
 
     /* ===================  VARIABLES ETAT PERSONNAGE ===================  */
-    [SerializeField] bool estCache = true; // Bool memorisant si le personnage est cache
-    [SerializeField] bool estMort = false; // Bool memorisant si le personnag est mort
+    [SerializeField] bool estVisible = true; // Bool memorisant si le personnage est cache
+    [SerializeField] bool estVivant = true; // Bool memorisant si le personnag est mort
 
 
     /* =================== REFERENCES AUX COMPONENTS =================== */
@@ -51,12 +51,12 @@ public class ErikaDeplacement : MonoBehaviour
             - Etat cache/visible
             - Etat mort/vivant
         */
-        GAMEMANAGER.joueurCache = estCache;
-        GAMEMANAGER.joueurMort = estMort;
+        GAMEMANAGER.joueurVisible = estVisible;
+        GAMEMANAGER.joueurVivant = estVivant;
 
         /* ================================ INPUTS DEPLACEMENT/SAUTS ================================ */
 
-        if (!estMort)
+        if (estVivant)
         {
             // Si le joueur appuit sur la 'espace' et qu'il est au sol
             // Applique la force de saut au deplacement en Y et Strigger le parametre saut de l'animator
@@ -100,7 +100,7 @@ public class ErikaDeplacement : MonoBehaviour
 
         // Permet les modifications des deplacement en X et Z du personnage seuelemt si il touche au sol
         // Fix la velocite en Y a la force de gravite, pour evite qu'elle continue de trop baisser
-        if (auSol && !estMort)
+        if (auSol && estVivant)
         {
             mouvHorizontal = Input.GetAxisRaw("Horizontal");
             mouvVertical = Input.GetAxisRaw("Vertical");
@@ -145,9 +145,9 @@ public class ErikaDeplacement : MonoBehaviour
     {
         // Lorsque le joueur se fait frappe par l'epee d'un paladin 
         // le joueur meurt
-        if (collision.gameObject.name == "epee" && !estMort)
+        if (collision.gameObject.name == "epee" && estVivant)
         {
-            estMort = true;
+            estVivant = false;
 
             animator.SetTrigger("mortTrigger");
         }
@@ -159,8 +159,8 @@ public class ErikaDeplacement : MonoBehaviour
         // Il n'est plus cache et donc le rend suseptible d'etre vu par les ennemies
         if (collision.gameObject.tag == "lumiereRevele")
         {
-            estCache = false;
-            Debug.Log("Personnage est toujours dans la lumiere");
+            estVisible = false;
+            // Debug.Log("Personnage est toujours dans la lumiere");
         }
     }
 
@@ -170,8 +170,8 @@ public class ErikaDeplacement : MonoBehaviour
         if (collision.gameObject.tag == "lumiereRevele")
         {
             // Le personnage redevient cache
-            estCache = true;
-            Debug.Log("Personnage est cache");
+            estVisible = true;
+            // Debug.Log("Personnage est cache");
         }
     }
 

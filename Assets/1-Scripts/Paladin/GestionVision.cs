@@ -4,7 +4,6 @@ using UnityEngine;
     Scripte de gestion des visions des paladin : 
         - Distance maximale de vision
         - Regarde si un object se trouve entre la cible et paladin -> donc peut pas voir
-
     Par Yanis Oulmane
     Derniere modification : 06-11-2024
  */

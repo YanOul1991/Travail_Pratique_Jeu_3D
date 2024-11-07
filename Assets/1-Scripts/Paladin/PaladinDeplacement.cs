@@ -16,20 +16,12 @@ public class PaladinDeplacement : MonoBehaviour
     public bool joueurDansVision;
     private float vitesseReel; // Vitesse qui sera applique au mouvemen du personnage
     CharacterController controlleurPerso;
-    Animator animateur;
     /* =========================================================================== */
 
     // Start is called before the first frame update
     void Start()
     {
         controlleurPerso = GetComponent<CharacterController>();
-        animateur = GetComponent<Animator>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     void FixedUpdate()
@@ -50,7 +42,7 @@ public class PaladinDeplacement : MonoBehaviour
         // Si le joueur est dans la champ de vision du paladin et qu'il nest pas cache
         // Alors le paladin cours vers le joueur
         // Paladin Regarde la cible
-        if (!GAMEMANAGER.joueurCache && joueurDansVision && Vector3.Distance(posCible.position, transform.position) > 2)
+        if (!GAMEMANAGER.joueurVisible && joueurDansVision && Vector3.Distance(posCible.position, transform.position) > 2)
         {
             vitesseReel = vitesseCourse;
             transform.LookAt(posCible);
@@ -60,25 +52,12 @@ public class PaladinDeplacement : MonoBehaviour
         // Arrange les rotation pour pas qu'il tourne sur lui meme
         transform.localEulerAngles = new Vector3(0f, transform.localEulerAngles.y, 0f);
 
-        // Appel de la fonction de gestion des animations du Paladin
-        GestionAnimDeplacement(mouvement);
-
         // Applique la force de gravite au mouvement global du paladin
         // Applique la somme des mouvements au CharacterController
         mouvement.y = velociteY;
         controlleurPerso.Move(mouvement * Time.deltaTime);
-    }
 
-    void GestionAnimDeplacement(Vector3 mouvSol)
-    {
-        // Le paramtre vitesse de l'animateur recervra comme valeur la magnitude du vecteur de deplacement au sol du paladin
-        animateur.SetFloat("vitesse", mouvSol.magnitude);
-
-        // 
-        if (Vector3.Distance(posCible.position, transform.position) < 3 && joueurDansVision && !GAMEMANAGER.joueurCache && !GAMEMANAGER.joueurMort)
-        {
-            // Debug.Log("Condiditon optimales pour attaquer !!!");
-            animateur.SetTrigger("attaque");
-        }
+        // Fonction de gestion des animations du paladin
+        GetComponent<PaladinAnimations>().GestionAnimations(mouvement, posCible, transform, joueurDansVision, GAMEMANAGER.joueurVisible, GAMEMANAGER.joueurVivant);
     }
 }

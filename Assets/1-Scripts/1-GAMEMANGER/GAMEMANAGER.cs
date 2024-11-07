@@ -9,8 +9,8 @@ using UnityEngine;
  */
 public class GAMEMANAGER : MonoBehaviour
 {
-    static public bool joueurCache;
-    static public bool joueurMort;
+    static public bool joueurVisible;
+    static public bool joueurVivant;
 
     // Start is called before the first frame update
     void Start()

@@ -144,6 +144,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PaladinTorche (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 4205807294674958029, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
+      propertyPath: porteeAttaque
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4274932965212064341, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -208,6 +212,10 @@ PrefabInstance:
     - target: {fileID: 3465603808009310447, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
       propertyPath: m_Name
       value: PaladinTorche (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4205807294674958029, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
+      propertyPath: porteeAttaque
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4274932965212064341, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
       propertyPath: m_LocalPosition.x
@@ -279,6 +287,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PaladinTorche (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 4205807294674958029, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
+      propertyPath: porteeAttaque
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4274932965212064341, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
       propertyPath: m_LocalPosition.x
       value: -10.031982
@@ -346,6 +358,10 @@ PrefabInstance:
       propertyPath: cible
       value: 
       objectReference: {fileID: 1811480169}
+    - target: {fileID: 5438541773142951214, guid: 856eac5cd40cc664cb5303c9e081dbd2, type: 3}
+      propertyPath: porteeAttaque
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 5996229360961949746, guid: 856eac5cd40cc664cb5303c9e081dbd2, type: 3}
       propertyPath: m_Name
       value: Paladin (2)
@@ -423,6 +439,10 @@ PrefabInstance:
     - target: {fileID: 3465603808009310447, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
       propertyPath: m_Name
       value: PaladinTorche (18)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4205807294674958029, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
+      propertyPath: porteeAttaque
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4274932965212064341, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
       propertyPath: m_LocalPosition.x
@@ -592,6 +612,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PaladinTorche (11)
       objectReference: {fileID: 0}
+    - target: {fileID: 4205807294674958029, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
+      propertyPath: porteeAttaque
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4274932965212064341, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
       propertyPath: m_LocalPosition.x
       value: -105.23
@@ -662,6 +686,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PaladinTorche (12)
       objectReference: {fileID: 0}
+    - target: {fileID: 4205807294674958029, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
+      propertyPath: porteeAttaque
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4274932965212064341, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
       propertyPath: m_LocalPosition.x
       value: -60.981995
@@ -731,6 +759,10 @@ PrefabInstance:
     - target: {fileID: 3465603808009310447, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
       propertyPath: m_Name
       value: PaladinTorche (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4205807294674958029, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
+      propertyPath: porteeAttaque
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4274932965212064341, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
       propertyPath: m_LocalPosition.x
@@ -889,7 +921,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cible: {fileID: 1811480169}
   pivotCam: {fileID: 1372472692}
-  distanceCamera: 5
+  distanceCamera: 7
 --- !u!1001 &968005294
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -967,6 +999,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PaladinTorche (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 4205807294674958029, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
+      propertyPath: porteeAttaque
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4274932965212064341, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
       propertyPath: m_LocalPosition.x
       value: 61.225998
@@ -1029,6 +1065,10 @@ PrefabInstance:
       propertyPath: cible
       value: 
       objectReference: {fileID: 1811480169}
+    - target: {fileID: 5438541773142951214, guid: 856eac5cd40cc664cb5303c9e081dbd2, type: 3}
+      propertyPath: porteeAttaque
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 5996229360961949746, guid: 856eac5cd40cc664cb5303c9e081dbd2, type: 3}
       propertyPath: m_Name
       value: Paladin (3)
@@ -1185,6 +1225,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PaladinTorche (17)
       objectReference: {fileID: 0}
+    - target: {fileID: 4205807294674958029, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
+      propertyPath: porteeAttaque
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4274932965212064341, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
       propertyPath: m_LocalPosition.x
       value: 44.777466
@@ -1287,6 +1331,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PaladinTorche (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 4205807294674958029, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
+      propertyPath: porteeAttaque
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4274932965212064341, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
       propertyPath: m_LocalPosition.x
       value: 16.339996
@@ -1357,6 +1405,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PaladinTorche (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 4205807294674958029, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
+      propertyPath: porteeAttaque
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4274932965212064341, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
       propertyPath: m_LocalPosition.x
       value: -106.14
@@ -1419,6 +1471,10 @@ PrefabInstance:
       propertyPath: cible
       value: 
       objectReference: {fileID: 1811480169}
+    - target: {fileID: 5438541773142951214, guid: 856eac5cd40cc664cb5303c9e081dbd2, type: 3}
+      propertyPath: porteeAttaque
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 5996229360961949746, guid: 856eac5cd40cc664cb5303c9e081dbd2, type: 3}
       propertyPath: m_Name
       value: Paladin (1)
@@ -1529,6 +1585,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PaladinTorche (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4205807294674958029, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
+      propertyPath: porteeAttaque
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4274932965212064341, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
       propertyPath: m_LocalPosition.x
       value: 8.689987
@@ -1599,6 +1659,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PaladinTorche (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 4205807294674958029, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
+      propertyPath: porteeAttaque
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4274932965212064341, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
       propertyPath: m_LocalPosition.x
       value: -61.6
@@ -1668,6 +1732,10 @@ PrefabInstance:
     - target: {fileID: 3465603808009310447, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
       propertyPath: m_Name
       value: PaladinTorche (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4205807294674958029, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
+      propertyPath: porteeAttaque
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4274932965212064341, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1832,6 +1900,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PaladinTorche (15)
       objectReference: {fileID: 0}
+    - target: {fileID: 4205807294674958029, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
+      propertyPath: porteeAttaque
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4274932965212064341, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
       propertyPath: m_LocalPosition.x
       value: 46.587708
@@ -1907,6 +1979,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PaladinTorche (16)
       objectReference: {fileID: 0}
+    - target: {fileID: 4205807294674958029, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
+      propertyPath: porteeAttaque
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4274932965212064341, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
       propertyPath: m_LocalPosition.x
       value: 53.484
@@ -1977,6 +2053,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PaladinTorche (14)
       objectReference: {fileID: 0}
+    - target: {fileID: 4205807294674958029, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
+      propertyPath: porteeAttaque
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4274932965212064341, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
       propertyPath: m_LocalPosition.x
       value: 18.01
@@ -2046,6 +2126,10 @@ PrefabInstance:
     - target: {fileID: 3465603808009310447, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
       propertyPath: m_Name
       value: PaladinTorche (13)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4205807294674958029, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
+      propertyPath: porteeAttaque
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4274932965212064341, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2228,6 +2312,10 @@ PrefabInstance:
       propertyPath: cible
       value: 
       objectReference: {fileID: 1811480169}
+    - target: {fileID: 5438541773142951214, guid: 856eac5cd40cc664cb5303c9e081dbd2, type: 3}
+      propertyPath: porteeAttaque
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 5996229360961949746, guid: 856eac5cd40cc664cb5303c9e081dbd2, type: 3}
       propertyPath: m_Name
       value: Paladin
@@ -2305,6 +2393,10 @@ PrefabInstance:
     - target: {fileID: 3465603808009310447, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
       propertyPath: m_Name
       value: PaladinTorche
+      objectReference: {fileID: 0}
+    - target: {fileID: 4205807294674958029, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
+      propertyPath: porteeAttaque
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4274932965212064341, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
       propertyPath: m_LocalPosition.x
