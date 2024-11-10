@@ -152,11 +152,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vitesseMarche: 2
-  vitesseJogging: 5
   vitesseSprint: 7
   vitesseAccroupi: 1
   forceSaut: 7
   forceGravite: -10
   laCamera: {fileID: 0}
-  estCache: 1
-  estMort: 0
+  estVisible: 0
+  estVivant: 1

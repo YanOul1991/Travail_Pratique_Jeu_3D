@@ -2,7 +2,7 @@ using UnityEngine;
 /* 
 
  */
-public class PaladinAnimations : MonoBehaviour
+public class AnimationsPaladin : MonoBehaviour
 {
     [SerializeField] float porteeAttaque;
     Animator animatorComp; // Raccourci au component Animator du GameObject Paladin
@@ -13,7 +13,7 @@ public class PaladinAnimations : MonoBehaviour
         animatorComp = GetComponent<Animator>();
     }
 
-    public void GestionAnimations(Vector3 deplacement, Transform posCible, Transform posPaladin, bool dansChampVision, bool persoVisible, bool persoVivant)
+    public void GestionAnimations(Vector3 deplacement, Transform posCible, Transform posPaladin)
     {
         // Assignation de la valeur 0 au deplacement vertical pour ne prendre en compte que les deplacements sur le sol
         // Assigne la magnitude du vecteur resultant au parametre 'vitesse' de l'animator
@@ -24,15 +24,18 @@ public class PaladinAnimations : MonoBehaviour
         // Declaration d'un variable bool, pour definir si le personnage est dans la portee d'attaque du Paladin 
         bool persoDansPortee = Vector3.Distance(posCible.position, posPaladin.position) < porteeAttaque ? true : false;
         
-        animatorComp.SetBool("attk", VerificationCondition(persoDansPortee, dansChampVision, persoVisible, persoVivant));
+        animatorComp.SetBool("attk", VerificationCondition(persoDansPortee, GetComponent<VisionPaladin>().JoueurDansVision(), GameManager.joueurVisible, GameManager.joueurVivant));
     }
 
     /* 
         FONCTION GESTION ANIM ATTAQUE : 
-            - Fonction qui retourne un bool pour permettre ou non au paladin de jouer son animation d'attaque
-            - Donne un nombre non definit de parametres bool a analyser
-            - Avec un boucle verification de chaque conditions, et si une des condition est false la fonction retourne automatiquement false
-            - Si la boucle ne detecte pas de condition false, retourne true
+            Fonction qui verifie les conditions permettant au paladin de pouvoir activer son animation d'attaque.
+            Fera un boucle a l'array ou si une condition n'est pas respectee la fonction retourne imediatement false.
+            Si toute les conditions sont respecte alors elle retourne true.
+
+            Parametres : La fonction prend un nombre non definit de bool qui seront place dans un array;
+
+            Retourne : bool;
     */
     bool VerificationCondition(params bool[] lesConditions)
     {

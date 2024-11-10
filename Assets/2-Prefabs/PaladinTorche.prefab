@@ -271,6 +271,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   posCible: {fileID: 0}
+  vitesseMarche: 0
   vitesseCourse: 6
   joueurDansVision: 0
 --- !u!114 &1431873608172823517
@@ -299,6 +300,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee7086aee596b0f49826458d1a43f6aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  porteeAttaque: 3
 --- !u!4 &4867638040818355800 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9175088765034030054, guid: f7f89946817401649922dd6ab6d8ef20, type: 3}

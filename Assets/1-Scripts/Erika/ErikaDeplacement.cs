@@ -26,7 +26,7 @@ public class ErikaDeplacement : MonoBehaviour
     bool auSol; // Bool memorisant si le personnage touche au sol
 
     /* ===================  VARIABLES ETAT PERSONNAGE ===================  */
-    [SerializeField] bool estVisible = true; // Bool memorisant si le personnage est cache
+    [SerializeField] bool estVisible = false; // Bool memorisant si le personnage est cache
     [SerializeField] bool estVivant = true; // Bool memorisant si le personnag est mort
 
 
@@ -40,6 +40,9 @@ public class ErikaDeplacement : MonoBehaviour
         // Assigniation des references aux components
         controleur = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
+
+        // Assigniation de valeurs par defaut
+        estVisible = false;
     }
 
     // Fonction Update() gere les Inputs du joueurs et les etats du personnage  
@@ -51,8 +54,8 @@ public class ErikaDeplacement : MonoBehaviour
             - Etat cache/visible
             - Etat mort/vivant
         */
-        GAMEMANAGER.joueurVisible = estVisible;
-        GAMEMANAGER.joueurVivant = estVivant;
+        GameManager.joueurVisible = estVisible;
+        GameManager.joueurVivant = estVivant;
 
         /* ================================ INPUTS DEPLACEMENT/SAUTS ================================ */
 
@@ -152,26 +155,24 @@ public class ErikaDeplacement : MonoBehaviour
             animator.SetTrigger("mortTrigger");
         }
     }
-
+    
     void OnTriggerStay(Collider collision)
     {
         // lorsque le personnage reste dans le Trigger d'un object qui possede le tag 'lumiereRevele'
         // Il n'est plus cache et donc le rend suseptible d'etre vu par les ennemies
         if (collision.gameObject.tag == "lumiereRevele")
         {
-            estVisible = false;
-            // Debug.Log("Personnage est toujours dans la lumiere");
+            estVisible = true;
         }
     }
 
     void OnTriggerExit(Collider collision)
     {
         // Si il quite toutes les zones qui genere de la lumiere
+        // Le personnage redevient cache
         if (collision.gameObject.tag == "lumiereRevele")
         {
-            // Le personnage redevient cache
-            estVisible = true;
-            // Debug.Log("Personnage est cache");
+            estVisible = false;
         }
     }
 
@@ -188,9 +189,9 @@ public class ErikaDeplacement : MonoBehaviour
     }
 
     /* DEBUGGAGE DES RAYCASTS */
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position + new Vector3(0f, 0.3f, 0f), 0.3f);
-    }
+    // void OnDrawGizmosSelected()
+    // {
+    //     Gizmos.color = Color.yellow;
+    //     Gizmos.DrawWireSphere(transform.position + new Vector3(0f, 0.3f, 0f), 0.3f);
+    // }
 }

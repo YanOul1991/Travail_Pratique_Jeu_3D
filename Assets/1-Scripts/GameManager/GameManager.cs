@@ -7,7 +7,7 @@ using UnityEngine;
     Par Yanis Oulmane
     Derniere modification : 06/11/2024
  */
-public class GAMEMANAGER : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
     static public bool joueurVisible;
     static public bool joueurVivant;
@@ -20,11 +20,7 @@ public class GAMEMANAGER : MonoBehaviour
 
         // Verouillage de la souris au centre de l'ecran
         Cursor.lockState = CursorLockMode.Locked;
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        Debug.Log(" 3 % 5 = " + 3 % 5);
     }
 }

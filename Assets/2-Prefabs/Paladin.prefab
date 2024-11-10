@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1366424732869519696
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2468934759107670507}
+  m_Layer: 0
+  m_Name: VisionOrigine
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2468934759107670507
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1366424732869519696}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.0005, y: 0.0902, z: 0.1244}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1013767923188291595}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2119771318851051942
 GameObject:
   m_ObjectHideFlags: 0
@@ -105,9 +136,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Paladin
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f7f89946817401649922dd6ab6d8ef20, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -3321919801592875672, guid: f7f89946817401649922dd6ab6d8ef20, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2468934759107670507}
     - targetCorrespondingSourceObject: {fileID: 9175088765034030054, guid: f7f89946817401649922dd6ab6d8ef20, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1897051801743003056}
@@ -128,6 +166,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 5438541773142951214}
   m_SourcePrefab: {fileID: 100100000, guid: f7f89946817401649922dd6ab6d8ef20, type: 3}
+--- !u!4 &1013767923188291595 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -3321919801592875672, guid: f7f89946817401649922dd6ab6d8ef20, type: 3}
+  m_PrefabInstance: {fileID: 6915148604292902243}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2352002271529488005 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9175088765034030054, guid: f7f89946817401649922dd6ab6d8ef20, type: 3}
@@ -199,6 +242,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   posCible: {fileID: 0}
+  vitesseMarche: 0
   vitesseCourse: 6
   joueurDansVision: 0
 --- !u!114 &1905639451178928864
@@ -227,4 +271,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee7086aee596b0f49826458d1a43f6aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animatorComp: {fileID: 0}
+  porteeAttaque: 3
