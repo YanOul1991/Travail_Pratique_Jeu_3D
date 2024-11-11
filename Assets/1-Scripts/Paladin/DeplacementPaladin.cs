@@ -21,7 +21,8 @@ public class DeplacementPaladin : MonoBehaviour
 
     /* --------------- REF COMPONENTS --------------- */
     CharacterController controlleurPerso; // Reference au CharacterController component du paladin
-    VisionPaladin visionPaladin; // Reference a la class visionPaladin
+    VisionPaladin visionPaladin; // Reference a la classe VisionPaladin
+    PatrouillePaladin patrouillePaladin; // Reference a la classe PatrouillePaladin
 
     /* =========================================================================== */
 
@@ -32,6 +33,8 @@ public class DeplacementPaladin : MonoBehaviour
         controlleurPerso = GetComponent<CharacterController>();
 
         visionPaladin = GetComponent<VisionPaladin>();
+
+        patrouillePaladin = GetComponent<PatrouillePaladin>();
     }
 
     void FixedUpdate()
@@ -57,6 +60,13 @@ public class DeplacementPaladin : MonoBehaviour
             // vitesseReel = vitesseCourse;
             transform.LookAt(posCible);
             mouvement = transform.forward * vitesseCourse;   
+            // Fonction de gestion des animations du paladin
+            GetComponent<AnimationsPaladin>().GestionAnimations(mouvement, posCible, transform);
+        }
+        
+        if (!enChasse)
+        {
+            transform.LookAt(patrouillePaladin.DestinationDeplacement().position);
         }
 
         // Arrange les rotation pour pas qu'il tourne sur lui meme
@@ -67,15 +77,13 @@ public class DeplacementPaladin : MonoBehaviour
         mouvement.y = velociteY;
         controlleurPerso.Move(mouvement * Time.deltaTime);
 
-        // Fonction de gestion des animations du paladin
-        GetComponent<AnimationsPaladin>().GestionAnimations(mouvement, posCible, transform);
     }
 
     /* 
         Fonction qui verifie si toute les conditions qui permettent de mettre le personnage en etat de chasse
         sont respectes.
         
-        Passe comme parametre
+        Passe comme parametre des bool; 
     */
     bool ConditionsChasse(params bool[] lesConditions)
     {

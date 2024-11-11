@@ -9,18 +9,17 @@ using UnityEngine;
  */
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] Transform personnageTransform; // Reference au component Transform du personnage;
     static public bool joueurVisible;
     static public bool joueurVivant;
 
     // Start is called before the first frame update
     void Start()
     {
-        // Verouillage du framerate du jeu a 60fps (sinon mon ordi tente de faire tourner le jeu a 900 fps)
-        Application.targetFrameRate = 60;
-
         // Verouillage de la souris au centre de l'ecran
         Cursor.lockState = CursorLockMode.Locked;
 
-        Debug.Log(" 3 % 5 = " + 3 % 5);
+        // Verouillage du framerate du jeu a 60fps (sinon mon ordi tente de faire tourner le jeu a 900 fps)
+        Application.targetFrameRate = 60;
     }
 }

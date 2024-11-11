@@ -24,7 +24,7 @@ public class AnimationsPaladin : MonoBehaviour
         // Declaration d'un variable bool, pour definir si le personnage est dans la portee d'attaque du Paladin 
         bool persoDansPortee = Vector3.Distance(posCible.position, posPaladin.position) < porteeAttaque ? true : false;
         
-        animatorComp.SetBool("attk", VerificationCondition(persoDansPortee, GetComponent<VisionPaladin>().JoueurDansVision(), GameManager.joueurVisible, GameManager.joueurVivant));
+        animatorComp.SetBool("attk", ConditionsAttaqueAnim(persoDansPortee, GetComponent<VisionPaladin>().JoueurDansVision(), GameManager.joueurVisible, GameManager.joueurVivant));
     }
 
     /* 
@@ -37,7 +37,7 @@ public class AnimationsPaladin : MonoBehaviour
 
             Retourne : bool;
     */
-    bool VerificationCondition(params bool[] lesConditions)
+    bool ConditionsAttaqueAnim(params bool[] lesConditions)
     {
         foreach (bool condition in lesConditions)
         {
