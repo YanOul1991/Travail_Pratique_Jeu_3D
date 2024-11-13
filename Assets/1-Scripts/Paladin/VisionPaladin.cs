@@ -23,9 +23,6 @@ public class VisionPaladin : MonoBehaviour
 
     void FixedUpdate()
     {
-        /* 
-            
-        */
         // Regarder si le joueur se trouve a une certaine distance du paladin;
         // if true -> creer un Raycast entre paladin et cible.
         // if false -> joueur est automatiquement pas dans le champ de vision

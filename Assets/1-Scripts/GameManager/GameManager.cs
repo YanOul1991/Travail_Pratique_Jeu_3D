@@ -22,4 +22,14 @@ public class GameManager : MonoBehaviour
         // Verouillage du framerate du jeu a 60fps (sinon mon ordi tente de faire tourner le jeu a 900 fps)
         Application.targetFrameRate = 60;
     }
+
+    /* FONCTIONS RETOURNANTS INFOS */
+    public bool JoueurEnVie()
+    {
+        return joueurVivant;
+    }
+    public bool JoueurEstVisible()
+    {
+        return joueurVisible;
+    }
 }

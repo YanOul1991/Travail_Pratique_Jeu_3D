@@ -6,25 +6,32 @@ public class AnimationsPaladin : MonoBehaviour
 {
     [SerializeField] float porteeAttaque;
     Animator animatorComp; // Raccourci au component Animator du GameObject Paladin
+    VisionPaladin visionPaladin; // Reference a la classe VisionPaladin
 
     void Start()
     {
         /* ASSIGNATION DE LA REFERENCE AUX COMPONENT ANIMATOR DU GAMEOBJECT */
         animatorComp = GetComponent<Animator>();
+        visionPaladin = GetComponent<VisionPaladin>();
     }
 
-    public void GestionAnimations(Vector3 deplacement, Transform posCible, Transform posPaladin)
+    public void AnimationDeplacement(float deplacement)
+    {
+        animatorComp.SetFloat("vitesse", deplacement);
+    }
+
+    public void AnimationAttaque()
     {
         // Assignation de la valeur 0 au deplacement vertical pour ne prendre en compte que les deplacements sur le sol
         // Assigne la magnitude du vecteur resultant au parametre 'vitesse' de l'animator
-        deplacement.y = 0;
+        // deplacement.y = 0;
 
-        animatorComp.SetFloat("vitesse", deplacement.magnitude);
+        // animatorComp.SetFloat("vitesse", deplacement.magnitude);
 
         // Declaration d'un variable bool, pour definir si le personnage est dans la portee d'attaque du Paladin 
-        bool persoDansPortee = Vector3.Distance(posCible.position, posPaladin.position) < porteeAttaque ? true : false;
+        // bool persoDansPortee = Vector3.Distance(posCible.position,transform.position) < porteeAttaque ? true : false;
         
-        animatorComp.SetBool("attk", ConditionsAttaqueAnim(persoDansPortee, GetComponent<VisionPaladin>().JoueurDansVision(), GameManager.joueurVisible, GameManager.joueurVivant));
+        animatorComp.SetBool("attk", ConditionsAttaqueAnim(visionPaladin.JoueurDansVision(), GameManager.joueurVisible, GameManager.joueurVivant));
     }
 
     /* 
