@@ -12,7 +12,7 @@ public class VisionPaladin : MonoBehaviour
 {
     [SerializeField] Transform cible; // Reference au component Transform de la cible
     [SerializeField] float distanceMax; // Distance maximal a laquel le paladin peut reperer une entite, qu'elle soit cache ou non
-    [SerializeField] bool joueurVisible; // Bool memorisant si le joueur est visible
+    [SerializeField] bool joueurDansVision; // Bool memorisant si le joueur est dans le champ de vision du paladin
     int lesLayers; // Les layers que le Raycast analysera pour la detection (optimisation) 
 
     void Start()
@@ -35,21 +35,21 @@ public class VisionPaladin : MonoBehaviour
             {
                 // Si le le point de collision du ray est la position de la cible
                 // Alors le joueur est dans le champ de vision du paladin
-               joueurVisible = collision.transform == cible ? true : false;
+               joueurDansVision = collision.transform == cible ? true : false;
 
                 /* ------------------------- Debug du Raycast ------------------------- */
-                Debug.DrawRay(leRay.origin, leRay.direction * Vector3.Distance(transform.position + Vector3.up, collision.point), Color.yellow);
+                // Debug.DrawRay(leRay.origin, leRay.direction * Vector3.Distance(transform.position + Vector3.up, collision.point), Color.yellow);
             }
         }
         else
         {
-            joueurVisible = false;
+            joueurDansVision = false;
         }
     }
 
     /* Fonction retournant la valeur de la variable joueurVisible */
     public bool JoueurDansVision()
     {
-        return joueurVisible;
+        return joueurDansVision;
     }
 }

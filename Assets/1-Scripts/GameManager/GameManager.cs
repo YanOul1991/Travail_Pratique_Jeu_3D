@@ -10,7 +10,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] Transform personnageTransform; // Reference au component Transform du personnage;
-    static public bool joueurVisible;
+    static public bool joueurCache;
     static public bool joueurVivant;
 
     // Start is called before the first frame update
@@ -30,6 +30,6 @@ public class GameManager : MonoBehaviour
     }
     public bool JoueurEstVisible()
     {
-        return joueurVisible;
+        return joueurCache;
     }
 }

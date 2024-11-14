@@ -26,7 +26,7 @@ public class DeplacementErika : MonoBehaviour
     bool auSol; // Bool memorisant si le personnage touche au sol
 
     /* ===================  VARIABLES ETAT PERSONNAGE ===================  */
-    [SerializeField] bool estVisible = false; // Bool memorisant si le personnage est cache
+    [SerializeField] bool estCache = false; // Bool memorisant si le personnage est cache
     [SerializeField] bool estVivant = true; // Bool memorisant si le personnag est mort
 
 
@@ -44,7 +44,7 @@ public class DeplacementErika : MonoBehaviour
         infosErika = GetComponent<ErikaManager>();
 
         // Assigniation de valeurs par defaut
-        estVisible = false;
+        estCache = true;
     }
 
     // Fonction Update() gere les Inputs du joueurs et les etats du personnage  
@@ -56,12 +56,12 @@ public class DeplacementErika : MonoBehaviour
             - Etat cache/visible
             - Etat mort/vivant
         */
-        GameManager.joueurVisible = estVisible;
+        GameManager.joueurCache = estCache;
         GameManager.joueurVivant = estVivant;
 
         /* ================================ INPUTS DEPLACEMENT/SAUTS ================================ */
 
-        if (infosErika.EnVie())
+        if (estVivant)
         {
             // Si le joueur appuit sur la 'espace' et qu'il est au sol
             // Applique la force de saut au deplacement en Y et Strigger le parametre saut de l'animator
@@ -105,7 +105,7 @@ public class DeplacementErika : MonoBehaviour
 
         // Permet les modifications des deplacement en X et Z du personnage seuelemt si il touche au sol
         // Fix la velocite en Y a la force de gravite, pour evite qu'elle continue de trop baisser
-        if (auSol && infosErika.EnVie())
+        if (auSol && estVivant)
         {
             mouvHorizontal = Input.GetAxisRaw("Horizontal");
             mouvVertical = Input.GetAxisRaw("Vertical");
@@ -145,12 +145,11 @@ public class DeplacementErika : MonoBehaviour
         GestionAnimations(mouvRelatif);
     }
 
-    // 
     void OnTriggerEnter(Collider collision)
     {
         // Lorsque le joueur se fait frappe par l'epee d'un paladin 
         // le joueur meurt
-        if (collision.gameObject.name == "epee" && infosErika.EnVie())
+        if (collision.gameObject.name == "epee" && estVivant)
         {
             infosErika.ImpacteEpee();
 
@@ -164,7 +163,7 @@ public class DeplacementErika : MonoBehaviour
         // Il n'est plus cache et donc le rend suseptible d'etre vu par les ennemies
         if (collision.gameObject.tag == "lumiereRevele")
         {
-            infosErika.DansLumiere();
+            estCache = false;
         }
     }
 
@@ -174,7 +173,7 @@ public class DeplacementErika : MonoBehaviour
         // Le personnage redevient cache
         if (collision.gameObject.tag == "lumiereRevele")
         {
-            infosErika.SortLumiere();
+            estCache = true;
         }
     }
 

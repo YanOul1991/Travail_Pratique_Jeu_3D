@@ -10,31 +10,37 @@ using UnityEngine.AI;
  */
 public class DeplacementPaladin : MonoBehaviour
 {
-    /* =================================== VARIABLES =================================== */
+    /* ============================================================================= */
+    /* ================================= VARIABLES ================================= */
+    /* ============================================================================= */
 
-    /* --------------- VAR MOUVEMENTS --------------- */
+    /***************** Mouvements *****************/
     [SerializeField] Transform joueurTransform; // Reference au componenent Transform du joueur;
     [SerializeField] float vitesseMarche; // Variable memorisant la vitesse de marche du paladin
     [SerializeField] float vitesseCourse; // Variable memorisant la vitesse de course du paladin
+    Vector3 posAlerte;
+    Vector3 posDestination;
 
-    /* ----------------- VAR ETATS ----------------- */
-    bool enChasse; // Variable memorisant si le paladin est entrain de chasser le joueur
+    /******************* Etats *******************/
+    bool enPatrouille; // Variable memorisant si le paladin est etat de patrouille;
+    bool enChasse; // Bool memorisant si le paladin est entrain de chasser le joueur;
+    bool enInspection; // Bool memorisant si le paladin est en etat d'inspection
 
-    /* --------------- REF COMPONENTS --------------- */
-    CharacterController controlleurPerso; // Reference au CharacterController component du paladin
+    /********** Ref components/classes **********/
     NavMeshAgent navAgent; // References au component NavMeshAgent du paladin;
-
     VisionPaladin visionPaladin; // Reference a la classe VisionPaladin
     PatrouillePaladin patrouillePaladin; // Reference a la classe PatrouillePaladin;
     AnimationsPaladin animPaladin; // Reference a la classe AnimationsPaladin;
 
+    /* =========================================================================== */
+    /* =========================================================================== */
     /* =========================================================================== */
 
     // Start is called before the first frame update
     void Start()
     {
         // Assigniation des references de components et scripts 
-        controlleurPerso = GetComponent<CharacterController>();
+        // controlleurPerso = GetComponent<CharacterController>();
         navAgent = GetComponent<NavMeshAgent>();
 
         visionPaladin = GetComponent<VisionPaladin>();
@@ -44,62 +50,64 @@ public class DeplacementPaladin : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Par defaut le paladin ne se deplace pas
-        // Vector3 mouvement = Vector3.zero;
+        /* ---------------------------------------------------- */
+        /* ----------------------- TEMP ----------------------- */
+        enChasse = false;
+        /* ----------------------- TEMP ----------------------- */
+        /* ---------------------------------------------------- */
 
-        // // Applique un force de gravite au paladin a chaque seconde
-        // float velociteY = 0;
-        // velociteY += -10 * Time.deltaTime;
-
-        // // Remet la velocite a -10 apres un certain treshold
-        // if (velociteY < -50)
-        // {
-        //     velociteY = -10;
-        // }
-
-        // vitesseReel = vitesseCourse;
-        // transform.LookAt(posCible);
-        // mouvement = transform.forward * vitesseCourse;   
-        // // Fonction de gestion des animations du paladin
-        // GetComponent<AnimationsPaladin>().GestionAnimations(mouvement, posCible, transform);
-
-        // Arrange les rotation pour pas qu'il tourne sur lui meme
-        // transform.localEulerAngles = new Vector3(0f, transform.localEulerAngles.y, 0f);
-
-        // Applique la force de gravite au mouvement global du paladin
-        // Applique la somme des mouvements au CharacterController
-        // mouvement.y = velociteY;
-        // controlleurPerso.Move(mouvement * Time.deltaTime);
-
-        /* ==================================================================================================================== */
-        /* =================================================== NavMeshAgent =================================================== */
-        /* ==================================================================================================================== */
-
-        // Appel de la fonction ConditionsChase pour determiner si le paladin est en etat de chase
-        // enChasse = ConditionsChasse(GameManager.joueurVisible,GameManager.joueurVivant, visionPaladin.JoueurDansVision());
-
+        // Deplacements du paladin si il est en train de chasser le joueur;
         if (enChasse)
         {
-
+            // Le paladin peut desormais se deplacer sur tout le navMesh
+            // La destination du paladin devient la position du joueur
+            navAgent.areaMask = NavMesh.AllAreas;
             navAgent.SetDestination(joueurTransform.position);
-
-            animPaladin.AnimationDeplacement(navAgent.velocity.magnitude);
         }
 
-        if (Vector3.Distance(transform.position, joueurTransform.position) < 3)
+        // Deplacements du paladin
+        if (!enChasse)
+        {
+            // Si le personnge n'est pas en mode patrouille
+            // Il retourne a la position ou il etait lors de l'alerte
+            if (!enPatrouille)
+            {   
+                posDestination = posAlerte;
+            }
+
+            // Si le paladin est a sa pos initiale
+            // Il revient en mode patrouille
+            // Et ne se deplace que sur la route
+            if (navAgent.remainingDistance < 0.3f)
+            {
+                enPatrouille = true;
+                navAgent.areaMask = 1 << NavMesh.GetAreaFromName("route");
+            }
+
+            // Si le paldin est en mode patrouille et qu'il arrive a son point de destination
+            // Appel de la methode DestinationDeplacement() pour passer au prochain point de patrouille
+            if (enPatrouille && navAgent.remainingDistance < 0.5f)
+            {
+                posDestination = patrouillePaladin.DestinationDeplacement().position;
+            }   
+
+            // Assigne la destination
+            navAgent.SetDestination(posDestination);
+        }
+
+        // Verifie si le joueur est a une certaine distance et que le paladin est en etat de chasse
+        // pour appeler la methode AnimationAttaque de la classe animPaladin
+        if (Vector3.Distance(transform.position, joueurTransform.position) < 3 && enChasse)
         {
             animPaladin.AnimationAttaque();
         }
     }
-
-    /* 
-        Fonction qui verifie si toute les conditions qui permettent de mettre le personnage en etat de chasse
-        sont respectes.
-        
-        Passe comme parametre des bool; 
-    */
+    
+    // Fonction retournant un bool verifiant si toutes les conditions pour que le paladin 
+    // commence a chaser le joueur sont respectes
     bool ConditionsChasse(params bool[] lesConditions)
-    {
+    {   
+        // Boucle retourne false quand une condition n'est pas respecte
         foreach (bool cond in lesConditions)
         {
             if (!cond)
@@ -108,6 +116,7 @@ public class DeplacementPaladin : MonoBehaviour
             }
         }
 
+        // Si passe a travers la boucle, retourne  true;
         return true;
     }
 }

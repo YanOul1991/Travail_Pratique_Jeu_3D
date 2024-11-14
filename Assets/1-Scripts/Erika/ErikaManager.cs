@@ -2,8 +2,8 @@ using UnityEngine;
 
 /* 
     Scripte de Gestion des infos globales du joueur
-    
 */
+
 public class ErikaManager : MonoBehaviour
 {
     [SerializeField] GameManager gameManager; // Reference au game manager
@@ -11,7 +11,6 @@ public class ErikaManager : MonoBehaviour
     // Variables globales privees
     private bool estVivant = true;
     private bool estCache = true;
-
 
     /* FONCTIONS DE MODIFICATIONS D'ETATS */
     public void DansLumiere()
@@ -28,7 +27,6 @@ public class ErikaManager : MonoBehaviour
     {
         estVivant = false;
     }
-
 
     /* FONCTIONS DE PARTAGES D'ETATS */
     public bool EnVie()

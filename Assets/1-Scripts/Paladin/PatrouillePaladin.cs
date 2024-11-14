@@ -33,6 +33,7 @@ public class PatrouillePaladin : MonoBehaviour
         positionsPoints = lesPoints;
     }
 
+    // Methode public retournant un Transform, qui increment l'index de la liste de destination du Paladin
     public Transform DestinationDeplacement()
     {   
         indexPointActuel = indexPointActuel + 1 % positionsPoints.Length;
