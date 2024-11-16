@@ -1,43 +1,67 @@
 using UnityEngine;
 
 /* 
-    Scripte de gestion des pattern de patrouille d'un paladin avec les etapes suivantes : 
-        - Definit un Serialized Transform[] ou tout les points par lesquel le paladin passera seront manuellement place, et seronts
-        place comme enfant du paladin.
+    Scripte de gestion des pattern de patrouille d'un paladin fonctionnant de la facon suivante : 
+        -   Chaque paladin aura un enfant GameObject nomme 'Points';
+        -   Cette enfant aura un nombre variable de points par lesquelles le paladins patrouillera;
+        -   Recupere la position de chaque point enfant du GameObject 'Points';
+        -   Place chaque position dans un Vector3[];
+        -   Une methode publique incrementera le point de destination qui sera appele dans DeplacementPaladin quand necessaire;
 
-        - ***** L'ORDRE DES POINTS EST IMPORTANT *****
+        ********************************** IMPORTANT ********************************** 
+        -   Pour que le paladin se dirige correctement vers un point de patrouille,
+            ce point doit se trouver dans l'area 'Route' (en rouge) du NavMesh;
 
-        - Les points seront place comme enfant du paladin.
+        -   L'ordre de chaque point du GameObject 'Points' dans la hierarchie est important,
+            celui tout en haut sera le premier dans l'array; 
 
-        - Un private Transform[] sera tout les elements du premier array dans la methode void Start() pour que les Transform des points
-        restent statique dans le monde et ne suivent plus le paladin.
-
-        - La script possede aussi une methode public qui itere l'index du point de deplacement qui sera memorise dans une variable et qui retourne 
-        le Transform du point a l'index correspondant. Cet methode sera appele dans la class DeplacementPaladin quand necessaire.
+        -   Le premier point de la serie sera toujours a la position du paladin;
 
     Par : Yanis Oulmane
-    Derniere modification : 11-11-2024
+    Derniere modification : 14-11-2024
 */
 
 public class PatrouillePaladin : MonoBehaviour
 {
-    [SerializeField] Transform[] lesPoints; // Arrays de transform qui aura les points par lesquels il passera;
-    private Transform[] positionsPoints; // private Transform[] morisant les positions de 
-    private int indexPointActuel; // Index du point vers lequel le Paladin se dirigera
+    private Vector3[] positions; // Arrays de Vector3 qui momoriseront toutes les positions de debart du array lesPoints[];
+    private int indexPointActuel = 0; // Index du point vers lequel le Paladin se dirigera, commence a 0;
 
-    // Start is called before the first frame update
     void Start()
     {
-        indexPointActuel = 0;
+        // Trouve l'enfant nomme 'Points' du paladin et assigne sa reference dans une variable;
+        // Initialise positions[] et assigne comme lenght le nb d'enfants de 'Points';
+        // Assigne chaque position des enfant dans positions[], a l'index equivalent;
+        // Detruit le GameObject "Points" (optimisation ???);
+        // Le premier point de la serie sera toujours la positino intiale du paladin
+        
+        GameObject lesPoints = transform.Find("Points").gameObject;
 
-        positionsPoints = lesPoints;
+        positions = new Vector3[lesPoints.transform.childCount];
+
+        for (int i = 0; i < lesPoints.transform.childCount; i++)
+        {
+            positions[i] = lesPoints.transform.GetChild(i).transform.position;
+        }
+
+        Destroy(lesPoints);
+
+        positions[0] = transform.position;
     }
 
     // Methode public retournant un Transform, qui increment l'index de la liste de destination du Paladin
-    public Transform DestinationDeplacement()
-    {   
-        indexPointActuel = indexPointActuel + 1 % positionsPoints.Length;
+    public Vector3 Destination()
+    {
+        // Incremente d'abord l'index de position 
+        // Verifie si rendu au dernier point de la liste, si oui, retourne au premier
+        // Retourne la position du points
 
-        return positionsPoints[indexPointActuel];
+        indexPointActuel ++;
+
+        if (indexPointActuel == positions.Length)
+        {
+            indexPointActuel = 0;
+        }
+        
+        return positions[indexPointActuel];
     }
 }
