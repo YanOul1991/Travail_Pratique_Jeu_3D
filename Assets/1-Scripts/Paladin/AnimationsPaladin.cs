@@ -25,12 +25,12 @@ public class AnimationsPaladin : MonoBehaviour
     // Fonction publique qui gere les animations d'attaque
     public void AnimationAttaque()
     {   
-        animatorComp.SetBool("attk", ConditionsAttaqueAnim(visionPaladin.JoueurDansVision(), GameManager.joueurCache, GameManager.joueurVivant));
+        animatorComp.SetBool("attk", GetAnimAttaque(visionPaladin.GetJoueurRepere(), GameManager.joueurDansOmbre, GameManager.joueurVivant));
     }
 
     // Fonction retournant un bool verifiant si toutes les conditions pour que l'animation 
     // d'attaque du paladin puisse etre joue
-    bool ConditionsAttaqueAnim(params bool[] lesConditions)
+    bool GetAnimAttaque(params bool[] lesConditions)
     {
         foreach (bool condition in lesConditions)
         {

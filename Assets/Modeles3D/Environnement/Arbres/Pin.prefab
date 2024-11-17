@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 2300000}
   - component: {fileID: 13600000}
   - component: {fileID: 2816041666023722541}
-  m_Layer: 0
+  - component: {fileID: 5686436324583333070}
+  m_Layer: 7
   m_Name: Pin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -131,3 +132,20 @@ MonoBehaviour:
   m_IgnoreFromBuild: 0
   m_ApplyToChildren: 1
   m_AffectedAgents: a98c17ec
+--- !u!114 &5686436324583333070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35e95dc5ff2b64380880dd7ac5922847, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SerializedVersion: 0
+  m_Size: {x: 1.9177977, y: 2.6803646, z: 1.6861331}
+  m_Center: {x: 0, y: 0.8401823, z: 0}
+  m_Area: 1
+  m_AffectedAgents: ffffffff

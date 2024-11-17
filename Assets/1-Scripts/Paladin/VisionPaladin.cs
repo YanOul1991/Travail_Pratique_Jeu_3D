@@ -10,60 +10,34 @@ using UnityEngine;
 
 public class VisionPaladin : MonoBehaviour
 {
-    [SerializeField] Transform cible; // Reference au component Transform de la cible
     [SerializeField] float distanceMax; // Distance maximal a laquel le paladin peut reperer une entite, qu'elle soit cache ou non
-    [SerializeField] bool joueurDansVision; // Bool memorisant si le joueur est dans le champ de vision du paladin
-    int lesLayers; // Les layers que le Raycast analysera pour la detection (optimisation) 
+    private Transform cible; // Reference au component Transform de la cible
+    int lesLayers; // Les layers que le Raycast analysera pour la detection;
 
     void Start()
     {
-        // Definition des layers qui serons pris en compte pour le Raycast de la vision
+        cible = GameObject.FindWithTag("Player").transform;
+
+        // Assigniation des layers qui serons pris en compte pour le Raycast de la vision
         lesLayers = 1 << LayerMask.NameToLayer("terrain") | 1 << LayerMask.NameToLayer("entite");
     }
 
-    void FixedUpdate()
+
+    /* 
+        > GetJoueurRepere() : 
+            Methode qui verifie a l'aide d'un raycast partant du paladin 
+            vers le joueur, si le joueur se trouve dans le champ de vision 
+            du paladin et donc si il se fait reperer;
+
+        > Retourne : bool;
+    */
+    public bool GetJoueurRepere()
     {
-
-
-        // Regarder si le joueur se trouve a une certaine distance du paladin;
-        // if true -> creer un Raycast entre paladin et cible.
-        // if false -> joueur est automatiquement pas dans le champ de vision
-        if (Vector3.Distance(transform.position, cible.position) <= distanceMax)
-        {
-            RaycastHit collision;
-            Ray leRay = new Ray(transform.position + Vector3.up, cible.position - transform.position);
-
-            if (Physics.Raycast(leRay, out collision, distanceMax, lesLayers))
-            {
-                // Si le le point de collision du ray est la position de la cible
-                // Alors le joueur est dans le champ de vision du paladin
-                joueurDansVision = collision.transform == cible ? true : false;
-
-                /* ------------------------- Debug du Raycast ------------------------- */
-                // Debug.DrawRay(leRay.origin, leRay.direction * Vector3.Distance(transform.position + Vector3.up, collision.point), Color.yellow);
-            }
-        }
-        else
-        {
-            joueurDansVision = false;
-        }
-    }
-
-    /* Fonction retournant la valeur de la variable joueurVisible */
-    public bool JoueurDansVision()
-    {
-        return joueurDansVision;
-    }
-
-
-    /* ------------------------------ TEST ------------------------------ */
-    public bool VisionSpotting()
-    {
-        Ray leRay = new(transform.position + Vector3.up, cible.position - transform.position);
+        Ray leRay = new (transform.position + Vector3.up, cible.position - transform.position);
 
         if (Physics.Raycast(leRay, out RaycastHit hitInfo, distanceMax, lesLayers))
         {
-            if (hitInfo.transform == cible)
+            if (hitInfo.transform == cible && !GameManager.joueurDansOmbre)
             {
                 return true;
             }
@@ -71,5 +45,4 @@ public class VisionPaladin : MonoBehaviour
 
         return false;
     }
-    /* ----------------------------------------------------------------- */
 }

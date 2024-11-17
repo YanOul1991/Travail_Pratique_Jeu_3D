@@ -48,12 +48,20 @@ public class PatrouillePaladin : MonoBehaviour
         positions[0] = transform.position;
     }
 
-    // Methode public retournant un Transform, qui increment l'index de la liste de destination du Paladin
-    public Vector3 Destination()
+    /* 
+        > Destination() : 
+            Methode public retournant un Transform, qui increment 
+            l'index du point de patrouille du paladin;
+        
+        > Retourne : Vector 3;
+    */
+    public Vector3 GetProchainPos()
     {
-        // Incremente d'abord l'index de position 
-        // Verifie si rendu au dernier point de la liste, si oui, retourne au premier
-        // Retourne la position du points
+        /*  
+            Incremente d'abord l'index de position 
+            Verifie si rendu au dernier point de la liste, si oui, retourne au premier
+            Retourne la position du points
+        */  
 
         indexPointActuel ++;
 
@@ -61,6 +69,8 @@ public class PatrouillePaladin : MonoBehaviour
         {
             indexPointActuel = 0;
         }
+
+        // indexPointActuel = (indexPointActuel + 1) % positions.Length;
         
         return positions[indexPointActuel];
     }

@@ -33,7 +33,6 @@ public class DeplacementErika : MonoBehaviour
     /* =================== REFERENCES AUX COMPONENTS =================== */
     CharacterController controleur;
     Animator animator;
-    ErikaManager infosErika;
 
     // Start is called before the first frame update
     void Start()
@@ -41,7 +40,6 @@ public class DeplacementErika : MonoBehaviour
         // Assigniation des references aux components
         controleur = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
-        infosErika = GetComponent<ErikaManager>();
 
         // Assigniation de valeurs par defaut
         estCache = true;
@@ -56,7 +54,7 @@ public class DeplacementErika : MonoBehaviour
             - Etat cache/visible
             - Etat mort/vivant
         */
-        GameManager.joueurCache = estCache;
+        GameManager.joueurDansOmbre = estCache;
         GameManager.joueurVivant = estVivant;
 
         /* ================================ INPUTS DEPLACEMENT/SAUTS ================================ */
@@ -151,7 +149,7 @@ public class DeplacementErika : MonoBehaviour
         // le joueur meurt
         if (collision.gameObject.name == "epee" && estVivant)
         {
-            infosErika.ImpacteEpee();
+            estVivant = false;
 
             animator.SetTrigger("mortTrigger");
         }

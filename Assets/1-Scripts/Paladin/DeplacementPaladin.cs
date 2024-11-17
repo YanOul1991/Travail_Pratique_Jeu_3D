@@ -18,102 +18,112 @@ public class DeplacementPaladin : MonoBehaviour
 
     /* --------------- Positions --------------- */
     private GameObject joueur;
-    private Vector3 posAlerte;
-    private Vector3 posPatrouille; 
-
-    /* ----------------- Etats ----------------- */
-    private int etat; // int memorisant 
-    private const int PATROUILLE = 0; //const int memorisant la valeur de PATROUILLE
-    private const int INSPECTION = 1; //const int memorisant la valeur de INSPECTION
-    private const int CHASSE = 2; //const int memorisant la valeur de CHASSE
-
 
     /* ---------- Components / Class ---------- */
+    private PaladinManager paladinManager;
     private NavMeshAgent navAgent; // References au component NavMeshAgent du paladin;
-    private VisionPaladin visionPaladin; // Reference a la classe VisionPaladin
     private PatrouillePaladin patrouillePaladin; // Reference a la classe PatrouillePaladin;
 
     /* =========================================================================== */
-    /* =========================================================================== */
 
-    // Start is called before the first frame update
     void Start()
     {
         joueur = GameObject.FindWithTag("Player");
 
         // Assigniation des references de components et scripts 
+        paladinManager = GetComponent<PaladinManager>();
         navAgent = GetComponent<NavMeshAgent>();
-        visionPaladin = GetComponent<VisionPaladin>();
         patrouillePaladin = GetComponent<PatrouillePaladin>();
 
-        etat = PATROUILLE;
-
-        // Appel la methode de patrouille une premiere fois
-        posPatrouille = patrouillePaladin.Destination();
-
+        // Assignitations de valeurs par defauts :
+        // Vitesse de deplacement du paladin
+        navAgent.speed = vitesseMarche;
     }
 
-    void Update()
-    {
+    /* ============================== METHODES ============================== */
 
-        if (Vector3.Distance(transform.position, joueur.transform.position) < 30 && !GameManager.joueurCache && visionPaladin.VisionSpotting())
+    public void SetNavArea()
+    {   
+        //  > Descr: 
+        //      Methode qui change le nav area du paladin selon son etat;
+
+        navAgent.areaMask = paladinManager.GetEtatPaldin() switch
         {
-            EtatPaladin();
-        }
-
-        if (etat == CHASSE && GameManager.joueurCache)
-        {
-            etat = INSPECTION;
-            navAgent.SetDestination(posAlerte);
-            navAgent.stoppingDistance = 0;
-        }
-
-        if (etat == INSPECTION && navAgent.remainingDistance < 0.1f)
-        {
-            etat = PATROUILLE;
-            navAgent.SetDestination(patrouillePaladin.Destination());
-        }
-
-        Debug.Log(navAgent.remainingDistance);
-
-
-        switch (etat)
-        {
-            case PATROUILLE:
-                navAgent.areaMask = 1 << NavMesh.GetAreaFromName("Route");
-
-                navAgent.speed = vitesseMarche;
-
-                // Verifie si le Paladin est arrive a son point de patrouille
-                // Si oui, passe au suivant
-                if (navAgent.remainingDistance < 0.1f)
-                {
-                    navAgent.SetDestination(patrouillePaladin.Destination());
-                }
-
-                break;
-
-            case INSPECTION:
-                navAgent.areaMask = NavMesh.AllAreas;
-                break;
-
-            case CHASSE:
-                navAgent.areaMask = NavMesh.AllAreas;
-
-                navAgent.speed = vitesseCourse;
-
-                navAgent.SetDestination(joueur.transform.position);
-                break;
-        }
+            PaladinManager.EtatsPaladin.PATROUILLE => 1 << NavMesh.GetAreaFromName("Route"),
+            PaladinManager.EtatsPaladin.INSPECTION => NavMesh.AllAreas,
+            PaladinManager.EtatsPaladin.CHASSE => NavMesh.AllAreas,
+            _ => NavMesh.AllAreas
+        };
     }
 
-    void EtatPaladin()
+    public void SetVitesseDeplac()
     {
-        if (etat == PATROUILLE)
+        //  > Descr : 
+        //      Methode qui set la vitesse de deplacement du paladin selon son etat;
+
+        navAgent.speed = paladinManager.GetEtatPaldin() switch
         {
-            navAgent.stoppingDistance = 0.5f;
-            posAlerte = transform.position;
-            etat = CHASSE;
+            PaladinManager.EtatsPaladin.PATROUILLE => vitesseMarche,
+            PaladinManager.EtatsPaladin.INSPECTION => vitesseMarche,
+            PaladinManager.EtatsPaladin.CHASSE => vitesseCourse,
+            _ => vitesseMarche
+        };
+    }
+
+    public void SetChasserJoueur()
+    {
+        //  > Descr :
+        //      Methode qui set la destination du NavMeshAgent du paladin a la position du joueur;
+
+        navAgent.SetDestination(joueur.transform.position);
+    }
+
+    public void SetPatrouillePos(Vector3 posPointPatrouille)
+    {
+        //  > Description :
+        //      Methode qui set la destionation du NavMeshAgent 
+        //      du paladin au point de patrouille approprie;
+        // 
+        //  > Param(1) : 
+        //      Vector3 -> Position du point de patrouille vers lequel le paladin se dirigera
+
+        navAgent.SetDestination(posPointPatrouille);
+    }
+
+    public bool GetArrivePosPatrouille()
+    {   
+        //  > Descr :
+        //      Methode qui verifie si le paladin est arrive a son point de patrouille;
+        // 
+        //  Retourne : bool;
+
+        if (navAgent.remainingDistance < 0.2f)
+        {
+            return true;
         }
+
+        return false;
+    }
+
+    public Vector3 GetPositionAlerte()
+    {
+        /* 
+            > Descr : 
+                Methode qui permet de recupere la position du paladin au moment d'une alerte;
+
+            > Retourne : Vector3; 
+        */
+        return transform.position;
+    }
+
+    public void SetRetournPosAlerte(Vector3 posAlerte)
+    {
+        navAgent.SetDestination(posAlerte);
+    }
+
+    public float GetDistanceCible()
+    {
+        return navAgent.remainingDistance;
     }
 }
+
