@@ -70,7 +70,7 @@ public class DeplacementPaladin : MonoBehaviour
         };
     }
 
-    public void SetChasserJoueur()
+    public void ChasserJoueur()
     {
         //  > Descr :
         //      Methode qui set la destination du NavMeshAgent du paladin a la position du joueur;

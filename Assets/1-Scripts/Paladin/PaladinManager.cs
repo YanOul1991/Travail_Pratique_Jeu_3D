@@ -22,18 +22,14 @@ public class PaladinManager : MonoBehaviour
     private PatrouillePaladin patrouillePaladin;
     private VisionPaladin visionPaladin;
     private AnimationsPaladin animationsPaladin;
-
-    // public enum des differents etats possibles du paladin
-    public enum EtatsPaladin
+    public enum EtatsPaladin // public enum des differents etats possibles du paladin
     {
         PATROUILLE,
         INSPECTION,
         CHASSE
     }
-
     private bool corChasseEnCours = false;
     private bool coroutineInspecDemar = false;
-
     private EtatsPaladin etat; // Variable prive memorisant l'etat du paladin
     private Vector3 posPointPatrouille; // Variable privee memorisant le point de patrouille du paladin
     private Vector3 posAlerte; // Var memorisant la position du paladin au moment de l'alerte
@@ -59,10 +55,18 @@ public class PaladinManager : MonoBehaviour
         deplacementPaladin.SetPatrouillePos(posPointPatrouille);
 
         StartCoroutine(LocalDebugDisplayInfo(1f));
+
+        /* ------------------------ DEBUG ------------------------ */
+        GetComponent<NavMeshAgent>().areaMask = NavMesh.AllAreas;
     }
 
     void Update()
     {
+        deplacementPaladin.ChasserJoueur();
+
+        return;
+
+
         // Analyse des scenarios possibles de detection et d'etats
         // La detection du joueur se fera seulment si celui-ci est a une certaine distance
 
@@ -112,7 +116,7 @@ public class PaladinManager : MonoBehaviour
         // sera dans la vision du paladin 
         while (visionPaladin.GetJoueurRepere())
         {
-            deplacementPaladin.SetChasserJoueur();
+            deplacementPaladin.ChasserJoueur();
             yield return new WaitForSeconds(1 / 15);
         }
 
