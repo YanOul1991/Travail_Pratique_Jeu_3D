@@ -55,18 +55,10 @@ public class PaladinManager : MonoBehaviour
         deplacementPaladin.SetPatrouillePos(posPointPatrouille);
 
         StartCoroutine(LocalDebugDisplayInfo(1f));
-
-        /* ------------------------ DEBUG ------------------------ */
-        GetComponent<NavMeshAgent>().areaMask = NavMesh.AllAreas;
     }
 
     void Update()
     {
-        deplacementPaladin.ChasserJoueur();
-
-        return;
-
-
         // Analyse des scenarios possibles de detection et d'etats
         // La detection du joueur se fera seulment si celui-ci est a une certaine distance
 
