@@ -28,8 +28,11 @@ public class AnimationsPaladin : MonoBehaviour
         animatorComp.SetBool("attk", GetAnimAttaque(visionPaladin.GetJoueurRepere(), GameManager.joueurDansOmbre, GameManager.joueurVivant));
     }
 
-    // Fonction retournant un bool verifiant si toutes les conditions pour que l'animation 
-    // d'attaque du paladin puisse etre joue
+    /// <summary>
+    /// Methode qui verifie si les conditions pour jouer l'animation d'attaque sont respectes.
+    /// </summary>
+    /// <param name="lesConditions"></param>
+    /// <returns>Bool</returns>
     bool GetAnimAttaque(params bool[] lesConditions)
     {
         foreach (bool condition in lesConditions)

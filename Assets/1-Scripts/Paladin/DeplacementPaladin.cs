@@ -42,6 +42,12 @@ public class DeplacementPaladin : MonoBehaviour
 
     /* ============================== METHODES ============================== */
 
+    // public void SetDeplacementConst()
+    // {
+    //     SetNavArea();
+    //     SetVitesseDeplac();
+    // }
+
     public void SetNavArea()
     {   
         //  > Descr: 
@@ -121,6 +127,11 @@ public class DeplacementPaladin : MonoBehaviour
         navAgent.SetDestination(posAlerte);
     }
 
+    /// <summary>
+    ///     Methode qui retourne la distance restante de la destination actuel de son component NavMeshAgent;
+    /// </summary>
+    /// 
+    /// <returns> float </returns>
     public float GetDistanceCible()
     {
         return navAgent.remainingDistance;

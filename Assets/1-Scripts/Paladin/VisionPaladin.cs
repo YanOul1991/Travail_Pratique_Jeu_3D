@@ -22,17 +22,21 @@ public class VisionPaladin : MonoBehaviour
         lesLayers = 1 << LayerMask.NameToLayer("terrain") | 1 << LayerMask.NameToLayer("entite");
     }
 
-
-    /* 
-        > GetJoueurRepere() : 
-            Methode qui verifie a l'aide d'un raycast partant du paladin 
-            vers le joueur, si le joueur se trouve dans le champ de vision 
-            du paladin et donc si il se fait reperer;
-
-        > Retourne : bool;
-    */
+    /// <summary>
+    ///     Methode qui verifie si le joueur est dans la vision du joueur et donc il se fait repere a laide d'un Raycast.
+    /// </summary>
+    /// 
+    /// <returns>
+    ///     Retourne true si le collider de la collision est celui du joueur. Sinon retourne false
+    /// </returns>
     public bool GetJoueurRepere()
-    {
+    {   
+        // Si le joueur est trop loin retourne tout de suite false.
+        if (Vector3.Distance(transform.position, cible.transform.position) > distanceMax)
+        {
+            return false;
+        }
+    
         Ray leRay = new (transform.position + Vector3.up, cible.position - transform.position);
 
         if (Physics.Raycast(leRay, out RaycastHit hitInfo, distanceMax, lesLayers))
@@ -42,7 +46,7 @@ public class VisionPaladin : MonoBehaviour
                 return true;
             }
         }
-
+        
         return false;
     }
 }

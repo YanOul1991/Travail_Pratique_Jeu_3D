@@ -28,6 +28,8 @@ public class PaladinManager : MonoBehaviour
         INSPECTION,
         CHASSE
     }
+
+    // private bool corPatrouilleEnCours = false;
     private bool corChasseEnCours = false;
     private bool coroutineInspecDemar = false;
     private EtatsPaladin etat; // Variable prive memorisant l'etat du paladin
@@ -36,7 +38,7 @@ public class PaladinManager : MonoBehaviour
 
     void Start()
     {
-        // Assignitation des references
+        // Assigne references aux autres classes
         deplacementPaladin = GetComponent<DeplacementPaladin>();
         patrouillePaladin = GetComponent<PatrouillePaladin>();
         visionPaladin = GetComponent<VisionPaladin>();
@@ -54,7 +56,10 @@ public class PaladinManager : MonoBehaviour
         posPointPatrouille = patrouillePaladin.GetProchainPos();
         deplacementPaladin.SetPatrouillePos(posPointPatrouille);
 
-        StartCoroutine(LocalDebugDisplayInfo(1f));
+        /* --------------------------------------------- */
+        /* ------------------- DEBUG ------------------- */
+        /* --------------------------------------------- */
+        // StartCoroutine(LocalDebugDisplayInfo(1f));
     }
 
     void Update()
@@ -76,12 +81,9 @@ public class PaladinManager : MonoBehaviour
             appel la methode qui indique si le paladin repere le joueur de la class VisionPaladin;
             Si le joueur est repere, appel de la methode qui set l'etat de chasse
         */
-        if (Vector3.Distance(transform.position, joueur.transform.position) < distanceDetectionMax)
+        if (visionPaladin.GetJoueurRepere() && !corChasseEnCours)
         {
-            if (visionPaladin.GetJoueurRepere() && !corChasseEnCours)
-            {
-                StartCoroutine(GestionChasse());
-            }
+            StartCoroutine(GestionChasse());
         }
     }
 
@@ -96,56 +98,78 @@ public class PaladinManager : MonoBehaviour
         //      Coroutine de Gestion de l'etat de chasse du 
         //      paladin apres qu'il repere le joueur;
 
+        /* ================== MODIFICATION DE VARIBALES ================== */
         // Indique le la coroutine est en cours de marche
         // Mise a jours de letat du paladin et de sa vitesse de deplacement
+
+        // Debug.Log("START CHASSING PLAYER");
         posAlerte = deplacementPaladin.GetPositionAlerte();
         corChasseEnCours = true;
         etat = EtatsPaladin.CHASSE;
         deplacementPaladin.SetVitesseDeplac();
         deplacementPaladin.SetNavArea();
 
-        // Appel le fonction de chasse du joueur tant que celui-ci 
-        // sera dans la vision du paladin 
+        /* ================= BOUCLE DE CHASSE DU JOUEUR ================= */
+        // Appel le fonction de chasse du joueur tant que celui-ci;
+        // sera dans la vision du paladin ;
         while (visionPaladin.GetJoueurRepere())
         {
             deplacementPaladin.ChasserJoueur();
             yield return new WaitForSeconds(1 / 15);
         }
 
-        // Apres que le paladin perd le joueur de vue
-        // Attendre que celui-ci se trouve dans un certain permietre
-        // De ou celui-ci a vue le joueur pour la derniere fois;
-        while (GetComponent<NavMeshAgent>().remainingDistance > 5)
-        {
-            yield return new WaitForSeconds(1 / 15);
-        }
+        /* ======================= CHANGEMENT ETAT ======================= */
+        // Une fois que le joueur n'est plus visible
+        //  - Arrete la coroutine de chasse;
+        //  - Memorise qu'elle ne roule plus'
+        //  - Appel la coroutine de gestion de l'etat d'inspection
 
-        // Paladin inspct la dernier position du joueur pendant quelques secondes
-        yield return new WaitForSeconds(10f);
+        StartCoroutine(GestionInspection());
+        corChasseEnCours = false;
+        
 
+        /* ========================= FIN COROUTINE ========================= */
+        yield break;
+    }
 
+    IEnumerator GestionInspection()
+    {
+        /* =================== UPDATE DES VARIABLES =================== */
+
+        // Met a jour les variable approprie
+        //  - Memorise que la coroutine d'inspection est demmare;
+        //  - Met a jour l'etat du paladin;
+        //  - Met a jour la vitesse de deplacement du paladin
+        coroutineInspecDemar = true;
         etat = EtatsPaladin.INSPECTION;
         deplacementPaladin.SetVitesseDeplac();
 
-        deplacementPaladin.SetRetournPosAlerte(posAlerte);
+        /* =============== BOUCLE DERNIERE POS JOUEUR =============== */
+
+        // Attendre que le Paladin se trouve a quelques metres de la derniere position 
+        // connu du joueur avant de continuer
         while (deplacementPaladin.GetDistanceCible() > 0.1f)
         {
+            // Si le paladin repere de nouveau le joueur
+            // Retourne en mode chasse
+            if (visionPaladin.GetJoueurRepere())
+            {
+                // Debug.Log("From INSPECT TO CHASSE");
+
+                StopCoroutine(GestionInspection());
+                coroutineInspecDemar = false;
+                StartCoroutine(GestionChasse());
+
+            }
+
             yield return new WaitForSeconds(1 / 15);
         }
 
-        // Paladin attent 5 secondes avant de retourner en patrouille
-        yield return new WaitForSeconds(5);
-
-        // Le paladin retourne en mode patrouille
-        // Et retourne vers le point de patrouille vers ou il devait se diriger
-        // avant qu'il soit interompu
-        etat = EtatsPaladin.PATROUILLE;
-        deplacementPaladin.SetNavArea();
-        deplacementPaladin.SetPatrouillePos(posPointPatrouille);
-
-        // Arret de la coroutine de chasse
-        StopCoroutine(GestionChasse());
-        corChasseEnCours = false;
+        while (true)
+        {
+            Debug.Log("we wait at last known pos ...");
+            yield return new WaitForSeconds(1);
+        }
     }
 
 
@@ -166,7 +190,7 @@ public class PaladinManager : MonoBehaviour
         while (true)
         {
             Debug.Log("\nvar : etat | value = " + etat);
-            Debug.Log("\n Coroutine chasse is playing : " + corChasseEnCours);
+            // Debug.Log("\n Coroutine chasse is playing : " + corChasseEnCours);
 
             yield return new WaitForSeconds(interval);
         }
