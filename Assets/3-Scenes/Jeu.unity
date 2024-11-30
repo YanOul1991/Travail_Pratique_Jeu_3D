@@ -17,7 +17,7 @@ RenderSettings:
   m_Fog: 1
   m_FogColor: {r: 0.19382137, g: 0.21420184, b: 0.25157225, a: 1}
   m_FogMode: 3
-  m_FogDensity: 0.01
+  m_FogDensity: 0.02
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
@@ -1607,7 +1607,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 370.1
+  far clip plane: 500
   field of view: 50
   orthographic: 0
   orthographic size: 5
@@ -2130,7 +2130,6 @@ Transform:
   - {fileID: 705507995}
   - {fileID: 1539475957}
   - {fileID: 115061652}
-  - {fileID: 1811480169}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1251927675
@@ -3789,7 +3788,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1224192140}
+    m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 313097083120647780, guid: 18aca75c61e4ef446a75baea5d6931ad, type: 3}
       propertyPath: m_Name
@@ -3805,7 +3804,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1960753762846737866, guid: 18aca75c61e4ef446a75baea5d6931ad, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 241.05
+      value: -258.95
       objectReference: {fileID: 0}
     - target: {fileID: 1960753762846737866, guid: 18aca75c61e4ef446a75baea5d6931ad, type: 3}
       propertyPath: m_LocalPosition.y
@@ -3813,7 +3812,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1960753762846737866, guid: 18aca75c61e4ef446a75baea5d6931ad, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 56.57
+      value: -943.43
       objectReference: {fileID: 0}
     - target: {fileID: 1960753762846737866, guid: 18aca75c61e4ef446a75baea5d6931ad, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3821,15 +3820,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1960753762846737866, guid: 18aca75c61e4ef446a75baea5d6931ad, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 1960753762846737866, guid: 18aca75c61e4ef446a75baea5d6931ad, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 1960753762846737866, guid: 18aca75c61e4ef446a75baea5d6931ad, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 1960753762846737866, guid: 18aca75c61e4ef446a75baea5d6931ad, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3892,6 +3891,7 @@ SceneRoots:
   - {fileID: 551083680}
   - {fileID: 1224192140}
   - {fileID: 1372472692}
+  - {fileID: 3042562303469707450}
   - {fileID: 1408997912}
   - {fileID: 293811464}
   - {fileID: 548720664}

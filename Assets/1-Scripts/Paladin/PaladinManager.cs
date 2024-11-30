@@ -1,6 +1,5 @@
-using System.Collections;
 using UnityEngine;
-using UnityEngine.AI;
+using System.Collections;
 
 /* 
     Scripte de gestion d'un paladin:
@@ -29,7 +28,8 @@ public class PaladinManager : MonoBehaviour
         CHASSE
     }
 
-    // private bool corPatrouilleEnCours = false;
+    private string coroutineEnCours; // string memorisant le nom de la coroutine de gestion d'etat en cours
+
     private bool corChasseEnCours = false;
     private bool coroutineInspecDemar = false;
     private EtatsPaladin etat; // Variable prive memorisant l'etat du paladin
@@ -56,10 +56,12 @@ public class PaladinManager : MonoBehaviour
         posPointPatrouille = patrouillePaladin.GetProchainPos();
         deplacementPaladin.SetPatrouillePos(posPointPatrouille);
 
-        /* --------------------------------------------- */
+        coroutineEnCours = nameof(GestionChasse);
+
         /* ------------------- DEBUG ------------------- */
-        /* --------------------------------------------- */
         // StartCoroutine(LocalDebugDisplayInfo(1f));
+
+        Debug.Log("nom de la coroutine en cours : " + coroutineEnCours);
     }
 
     void Update()
@@ -90,19 +92,15 @@ public class PaladinManager : MonoBehaviour
 
     /* ============================= METHODES ============================= */
 
-    /* --------- Coroutines --------- */
-
+    /// <summary>
+    ///     Coroutine de gestion de l'etat de chasse du paladin.
+    /// </summary>
     IEnumerator GestionChasse()
     {
-        //  > Descr :
-        //      Coroutine de Gestion de l'etat de chasse du 
-        //      paladin apres qu'il repere le joueur;
-
-        /* ================== MODIFICATION DE VARIBALES ================== */
+        /* ================= MODIFICATION DE VARIBALES ================= */
         // Indique le la coroutine est en cours de marche
         // Mise a jours de letat du paladin et de sa vitesse de deplacement
-
-        // Debug.Log("START CHASSING PLAYER");
+        
         posAlerte = deplacementPaladin.GetPositionAlerte();
         corChasseEnCours = true;
         etat = EtatsPaladin.CHASSE;
@@ -118,7 +116,7 @@ public class PaladinManager : MonoBehaviour
             yield return new WaitForSeconds(1 / 15);
         }
 
-        /* ======================= CHANGEMENT ETAT ======================= */
+        /* ======================  CHANGEMENT ETAT ====================== */
         // Une fois que le joueur n'est plus visible
         //  - Arrete la coroutine de chasse;
         //  - Memorise qu'elle ne roule plus'
@@ -127,18 +125,20 @@ public class PaladinManager : MonoBehaviour
         StartCoroutine(GestionInspection());
         corChasseEnCours = false;
         
-
-        /* ========================= FIN COROUTINE ========================= */
+        /* ======================= FIN COROUTINE ======================= */
         yield break;
     }
 
+    /// <summary>
+    ///     Coroutine de gestion de l'etat d'insepction du paladin.
+    /// </summary>
     IEnumerator GestionInspection()
     {
         /* =================== UPDATE DES VARIABLES =================== */
 
         // Met a jour les variable approprie
         //  - Memorise que la coroutine d'inspection est demmare;
-        //  - Met a jour l'etat du paladin;
+        //  - Met a jour l'etat du paladin;\
         //  - Met a jour la vitesse de deplacement du paladin
         coroutineInspecDemar = true;
         etat = EtatsPaladin.INSPECTION;
@@ -154,12 +154,9 @@ public class PaladinManager : MonoBehaviour
             // Retourne en mode chasse
             if (visionPaladin.GetJoueurRepere())
             {
-                // Debug.Log("From INSPECT TO CHASSE");
-
                 StopCoroutine(GestionInspection());
                 coroutineInspecDemar = false;
                 StartCoroutine(GestionChasse());
-
             }
 
             yield return new WaitForSeconds(1 / 15);
@@ -173,13 +170,12 @@ public class PaladinManager : MonoBehaviour
     }
 
 
-    // Methode retournant l'etat du paladin
+    /// <summary>
+    ///     Methode qui retourne l'etat actuel du paladin
+    /// </summary>
+    /// <returns>Etat du paladin</returns>
     public EtatsPaladin GetEtatPaldin()
     {
-        //  > Descr : 
-        //      Methode qui rotourne l'etat dans lequel le paladin se retrouve;
-        // 
-        //  > Retourne : EtatsPaladin;
         return etat;
     }
 

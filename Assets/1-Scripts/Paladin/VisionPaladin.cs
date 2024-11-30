@@ -12,7 +12,7 @@ public class VisionPaladin : MonoBehaviour
 {
     [SerializeField] float distanceMax; // Distance maximal a laquel le paladin peut reperer une entite, qu'elle soit cache ou non
     private Transform cible; // Reference au component Transform de la cible
-    int lesLayers; // Les layers que le Raycast analysera pour la detection;
+    private int lesLayers; // Les layers que le Raycast analysera pour la detection;
 
     void Start()
     {
@@ -32,11 +32,8 @@ public class VisionPaladin : MonoBehaviour
     public bool GetJoueurRepere()
     {   
         // Si le joueur est trop loin retourne tout de suite false.
-        if (Vector3.Distance(transform.position, cible.transform.position) > distanceMax)
-        {
-            return false;
-        }
-    
+        if (Vector3.Distance(transform.position, cible.transform.position) > distanceMax) return false;
+
         Ray leRay = new (transform.position + Vector3.up, cible.position - transform.position);
 
         if (Physics.Raycast(leRay, out RaycastHit hitInfo, distanceMax, lesLayers))
