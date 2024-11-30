@@ -42,12 +42,6 @@ public class DeplacementPaladin : MonoBehaviour
 
     /* ============================== METHODES ============================== */
 
-    // public void SetDeplacementConst()
-    // {
-    //     SetNavArea();
-    //     SetVitesseDeplac();
-    // }
-
     public void SetNavArea()
     {   
         //  > Descr: 
@@ -61,7 +55,6 @@ public class DeplacementPaladin : MonoBehaviour
             _ => NavMesh.AllAreas
         };
     }
-
     public void SetVitesseDeplac()
     {
         //  > Descr : 
@@ -96,41 +89,18 @@ public class DeplacementPaladin : MonoBehaviour
         navAgent.SetDestination(posPointPatrouille);
     }
 
+    /// <summary>
+    ///     Methode qui verifie si le paladin est arrive a la destination de sa patrouille.
+    /// </summary>
+    /// <returns>Retourne true si le paladin est arrive a destination. Sinon retourne false.</returns>
     public bool GetArrivePosPatrouille()
     {   
-        //  > Descr :
-        //      Methode qui verifie si le paladin est arrive a son point de patrouille;
-        // 
-        //  Retourne : bool;
-
-        if (navAgent.remainingDistance < 0.2f)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    public Vector3 GetPositionAlerte()
-    {
-        /* 
-            > Descr : 
-                Methode qui permet de recupere la position du paladin au moment d'une alerte;
-
-            > Retourne : Vector3; 
-        */
-        return transform.position;
-    }
-
-    public void SetRetournPosAlerte(Vector3 posAlerte)
-    {
-        navAgent.SetDestination(posAlerte);
+        return navAgent.remainingDistance < 0.2f;
     }
 
     /// <summary>
     ///     Methode qui retourne la distance restante de la destination actuel de son component NavMeshAgent;
     /// </summary>
-    /// 
     /// <returns> float </returns>
     public float GetDistanceCible()
     {

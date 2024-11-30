@@ -28,10 +28,6 @@ public class PaladinManager : MonoBehaviour
         CHASSE
     }
 
-    private string coroutineEnCours; // string memorisant le nom de la coroutine de gestion d'etat en cours
-
-    private bool corChasseEnCours = false;
-    private bool coroutineInspecDemar = false;
     private EtatsPaladin etat; // Variable prive memorisant l'etat du paladin
     private Vector3 posPointPatrouille; // Variable privee memorisant le point de patrouille du paladin
     private Vector3 posAlerte; // Var memorisant la position du paladin au moment de l'alerte
@@ -55,13 +51,6 @@ public class PaladinManager : MonoBehaviour
         deplacementPaladin.SetNavArea();
         posPointPatrouille = patrouillePaladin.GetProchainPos();
         deplacementPaladin.SetPatrouillePos(posPointPatrouille);
-
-        coroutineEnCours = nameof(GestionChasse);
-
-        /* ------------------- DEBUG ------------------- */
-        // StartCoroutine(LocalDebugDisplayInfo(1f));
-
-        Debug.Log("nom de la coroutine en cours : " + coroutineEnCours);
     }
 
     void Update()
@@ -78,15 +67,7 @@ public class PaladinManager : MonoBehaviour
             }
         }
 
-        /* 
-            Si le joueur se trouve dans la distance de detection permise,
-            appel la methode qui indique si le paladin repere le joueur de la class VisionPaladin;
-            Si le joueur est repere, appel de la methode qui set l'etat de chasse
-        */
-        if (visionPaladin.GetJoueurRepere() && !corChasseEnCours)
-        {
-            StartCoroutine(GestionChasse());
-        }
+        if (visionPaladin.GetJoueurRepere() && etat == EtatsPaladin.PATROUILLE) StartCoroutine(GestionChasse());
     }
 
 
@@ -97,13 +78,12 @@ public class PaladinManager : MonoBehaviour
     /// </summary>
     IEnumerator GestionChasse()
     {
-        /* ================= MODIFICATION DE VARIBALES ================= */
-        // Indique le la coroutine est en cours de marche
-        // Mise a jours de letat du paladin et de sa vitesse de deplacement
-        
-        posAlerte = deplacementPaladin.GetPositionAlerte();
-        corChasseEnCours = true;
+
+        Debug.Log("chase coroutine started");        
         etat = EtatsPaladin.CHASSE;
+
+        posAlerte = transform.position;
+        
         deplacementPaladin.SetVitesseDeplac();
         deplacementPaladin.SetNavArea();
 
@@ -116,16 +96,11 @@ public class PaladinManager : MonoBehaviour
             yield return new WaitForSeconds(1 / 15);
         }
 
-        /* ======================  CHANGEMENT ETAT ====================== */
-        // Une fois que le joueur n'est plus visible
-        //  - Arrete la coroutine de chasse;
-        //  - Memorise qu'elle ne roule plus'
-        //  - Appel la coroutine de gestion de l'etat d'inspection
-
+       
+        // Une fois le joueur perdu de vue par le paladin 
+        // Demmarage de la coroutine d'inspection et arret de la coroutine en cours
+        Debug.Log("lost player from fov");
         StartCoroutine(GestionInspection());
-        corChasseEnCours = false;
-        
-        /* ======================= FIN COROUTINE ======================= */
         yield break;
     }
 
@@ -134,39 +109,24 @@ public class PaladinManager : MonoBehaviour
     /// </summary>
     IEnumerator GestionInspection()
     {
-        /* =================== UPDATE DES VARIABLES =================== */
-
-        // Met a jour les variable approprie
-        //  - Memorise que la coroutine d'inspection est demmare;
-        //  - Met a jour l'etat du paladin;\
-        //  - Met a jour la vitesse de deplacement du paladin
-        coroutineInspecDemar = true;
         etat = EtatsPaladin.INSPECTION;
         deplacementPaladin.SetVitesseDeplac();
 
-        /* =============== BOUCLE DERNIERE POS JOUEUR =============== */
-
-        // Attendre que le Paladin se trouve a quelques metres de la derniere position 
-        // connu du joueur avant de continuer
-        while (deplacementPaladin.GetDistanceCible() > 0.1f)
+        // Attendre que le paladin soit proche de la derniere position connue du joueur
+        while (deplacementPaladin.GetDistanceCible() > 0.5f)
         {
-            // Si le paladin repere de nouveau le joueur
-            // Retourne en mode chasse
+            // 
             if (visionPaladin.GetJoueurRepere())
             {
-                StopCoroutine(GestionInspection());
-                coroutineInspecDemar = false;
+                Debug.Log("interupted before point");
                 StartCoroutine(GestionChasse());
+                yield break;
             }
-
             yield return new WaitForSeconds(1 / 15);
         }
 
-        while (true)
-        {
-            Debug.Log("we wait at last known pos ...");
-            yield return new WaitForSeconds(1);
-        }
+        Debug.Log("Arrived at last known player location");
+        // Weewoo
     }
 
 
@@ -177,18 +137,5 @@ public class PaladinManager : MonoBehaviour
     public EtatsPaladin GetEtatPaldin()
     {
         return etat;
-    }
-
-
-    /* ---------------- DEBUGGAGE ---------------- */
-    IEnumerator LocalDebugDisplayInfo(float interval)
-    {
-        while (true)
-        {
-            Debug.Log("\nvar : etat | value = " + etat);
-            // Debug.Log("\n Coroutine chasse is playing : " + corChasseEnCours);
-
-            yield return new WaitForSeconds(interval);
-        }
     }
 }
