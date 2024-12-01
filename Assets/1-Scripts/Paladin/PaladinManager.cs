@@ -12,6 +12,7 @@ public class PaladinManager : MonoBehaviour
 
     /* Variables globales */
     [SerializeField] private float distanceDetectionMax;
+    [SerializeField] private float coroutineFramerate; // Frame rate des coroutine de gestion des etats du paladin
 
     /* --------------- References GameObject / Class --------------- */
     private GameObject joueur;
@@ -34,11 +35,16 @@ public class PaladinManager : MonoBehaviour
 
     void Start()
     {
+
         // Assigne references aux autres classes
         deplacementPaladin = GetComponent<DeplacementPaladin>();
         patrouillePaladin = GetComponent<PatrouillePaladin>();
         visionPaladin = GetComponent<VisionPaladin>();
         animationsPaladin = GetComponent<AnimationsPaladin>();
+
+        coroutineFramerate = 1 / coroutineFramerate;
+
+        Debug.Log("coroutine frame rate = " + coroutineFramerate);
 
         // Reference au joueur en le trouvant grace a son tag
         joueur = GameObject.FindWithTag("Player");
@@ -70,7 +76,21 @@ public class PaladinManager : MonoBehaviour
         if (visionPaladin.GetJoueurRepere() && etat == EtatsPaladin.PATROUILLE) StartCoroutine(GestionChasse());
     }
 
+    // IEnumerator GestionPatrouille()
+    // {
+    //     while (true)
+    //     {   
+    //         // Lorsque le paladin est arrive a sa position de patrouille
+    //         if (deplacementPaladin.GetArrivePosPatrouille())
+    //         {
+    //             // Appel la methode GetProchainPos de la class PatrouillePaladin pour passer au prochain point de patrouille
+    //             posPointPatrouille = patrouillePaladin.GetProchainPos();
+    //             // Set la destibation 
+    //         }
+    //     }
+    // }
 
+    
     /* ============================= METHODES ============================= */
 
     /// <summary>
@@ -79,11 +99,11 @@ public class PaladinManager : MonoBehaviour
     IEnumerator GestionChasse()
     {
 
-        Debug.Log("chase coroutine started");        
+        Debug.Log("chase coroutine started");
         etat = EtatsPaladin.CHASSE;
 
         posAlerte = transform.position;
-        
+
         deplacementPaladin.SetVitesseDeplac();
         deplacementPaladin.SetNavArea();
 
@@ -92,11 +112,11 @@ public class PaladinManager : MonoBehaviour
         // sera dans la vision du paladin ;
         while (visionPaladin.GetJoueurRepere())
         {
-            deplacementPaladin.ChasserJoueur();
-            yield return new WaitForSeconds(1 / 15);
+            deplacementPaladin.SetChasserJoueur();
+            yield return new WaitForSeconds(coroutineFramerate);
         }
 
-       
+
         // Une fois le joueur perdu de vue par le paladin 
         // Demmarage de la coroutine d'inspection et arret de la coroutine en cours
         Debug.Log("lost player from fov");
@@ -115,18 +135,35 @@ public class PaladinManager : MonoBehaviour
         // Attendre que le paladin soit proche de la derniere position connue du joueur
         while (deplacementPaladin.GetDistanceCible() > 0.5f)
         {
-            // 
             if (visionPaladin.GetJoueurRepere())
             {
                 Debug.Log("interupted before point");
                 StartCoroutine(GestionChasse());
                 yield break;
             }
-            yield return new WaitForSeconds(1 / 15);
+
+            yield return new WaitForSeconds(coroutineFramerate);
         }
 
-        Debug.Log("Arrived at last known player location");
-        // Weewoo
+        // Attendre pendant 10 secondes
+        float tempsAttente = 10;
+        while (tempsAttente > 0)
+        {
+            Debug.Log("remaining wait time : " + tempsAttente);
+
+            if (visionPaladin.GetJoueurRepere())
+            {
+                Debug.Log("wait time interrupted");
+                StartCoroutine(GestionChasse());
+                yield break;
+            }
+
+            tempsAttente -= coroutineFramerate;
+            yield return new WaitForSeconds(coroutineFramerate);
+        }
+
+        Debug.Log("player has been lost");  
+
     }
 
 

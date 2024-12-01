@@ -54,7 +54,7 @@ public class PatrouillePaladin : MonoBehaviour
             l'index du point de patrouille du paladin;
         
         > Retourne : Vector 3;
-    */
+    */  
     public Vector3 GetProchainPos()
     {
         /*  

@@ -69,23 +69,13 @@ public class DeplacementPaladin : MonoBehaviour
         };
     }
 
-    public void ChasserJoueur()
+    public void SetChasserJoueur()
     {
-        //  > Descr :
-        //      Methode qui set la destination du NavMeshAgent du paladin a la position du joueur;
-
         navAgent.SetDestination(joueur.transform.position);
     }
 
     public void SetPatrouillePos(Vector3 posPointPatrouille)
     {
-        //  > Description :
-        //      Methode qui set la destionation du NavMeshAgent 
-        //      du paladin au point de patrouille approprie;
-        // 
-        //  > Param(1) : 
-        //      Vector3 -> Position du point de patrouille vers lequel le paladin se dirigera
-
         navAgent.SetDestination(posPointPatrouille);
     }
 

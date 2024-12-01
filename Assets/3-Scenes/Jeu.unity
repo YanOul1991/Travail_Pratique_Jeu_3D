@@ -2654,6 +2654,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4230098287273933419, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
+      propertyPath: coroutineFramerate
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4230098287273933419, guid: ac700770bcc453b4f9992f1943637ebe, type: 3}
       propertyPath: distanceDetectionMax
       value: 75
       objectReference: {fileID: 0}
