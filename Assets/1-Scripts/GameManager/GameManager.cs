@@ -1,5 +1,4 @@
 using UnityEngine;
-
 /* 
     Scripte de gestions des fonctionalites globales du jeu :
         - Memoriser les etats du joueurs
@@ -15,10 +14,10 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         // Verouillage de la souris au centre de l'ecran
         Cursor.lockState = CursorLockMode.Locked;
-
-        // Verouillage du framerate du jeu a 60fps (sinon mon ordi tente de faire tourner le jeu a 900 fps)
+        
         Application.targetFrameRate = 60;
     }
 }

@@ -31,7 +31,6 @@ public class PatrouillePaladin : MonoBehaviour
         // Trouve l'enfant nomme 'Points' du paladin et assigne sa reference dans une variable;
         // Initialise positions[] et assigne comme lenght le nb d'enfants de 'Points';
         // Assigne chaque position des enfant dans positions[], a l'index equivalent;
-        // Detruit le GameObject "Points" (optimisation ???);
         // Le premier point de la serie sera toujours la positino intiale du paladin
         
         GameObject lesPoints = transform.Find("Points").gameObject;
@@ -69,7 +68,7 @@ public class PatrouillePaladin : MonoBehaviour
         {
             indexPointActuel = 0;
         }
-
+        
         // indexPointActuel = (indexPointActuel + 1) % positions.Length;
         
         return positions[indexPointActuel];

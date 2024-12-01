@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 /* 
-    Scripte de gestion d'un paladin:
+    Classe de gestion du paladin:
         - Gestion des 3 etats du paladin (patrouille, inspection, chasse);
         - Echanges de donnes entres les differents scriptes;
 */
@@ -14,10 +14,10 @@ public class PaladinManager : MonoBehaviour
     [SerializeField] private float distanceDetectionMax;
     [SerializeField] private float coroutineFramerate; // Frame rate des coroutine de gestion des etats du paladin
 
-    /* --------------- References GameObject / Class --------------- */
+    /* --------------- References GameObject / Classes --------------- */
     private GameObject joueur;
 
-    // References aux autres scriptes du paladin
+    // References aux autres classes du paladin
     private DeplacementPaladin deplacementPaladin;
     private PatrouillePaladin patrouillePaladin;
     private VisionPaladin visionPaladin;
@@ -36,61 +36,77 @@ public class PaladinManager : MonoBehaviour
     void Start()
     {
 
-        // Assigne references aux autres classes
+        /* ```````````````` Assigniation des references ```````````````` */
+        joueur = GameObject.FindWithTag("Player");
         deplacementPaladin = GetComponent<DeplacementPaladin>();
         patrouillePaladin = GetComponent<PatrouillePaladin>();
         visionPaladin = GetComponent<VisionPaladin>();
         animationsPaladin = GetComponent<AnimationsPaladin>();
 
+        /* ``````````````````` Assigne le frame rate ``````````````````` */
         coroutineFramerate = 1 / coroutineFramerate;
 
-        Debug.Log("coroutine frame rate = " + coroutineFramerate);
-
-        // Reference au joueur en le trouvant grace a son tag
-        joueur = GameObject.FindWithTag("Player");
-
-        // Etat par defaut du paladin = PATROUILLE
-        etat = EtatsPaladin.PATROUILLE;
-
-        // Set le premier point de patrouille du paladin 
-        // et fait deplacer le paladin vers cette position
-        deplacementPaladin.SetNavArea();
-        posPointPatrouille = patrouillePaladin.GetProchainPos();
-        deplacementPaladin.SetPatrouillePos(posPointPatrouille);
+        StartCoroutine(Initialise());
     }
 
-    void Update()
-    {
-        // Analyse des scenarios possibles de detection et d'etats
-        // La detection du joueur se fera seulment si celui-ci est a une certaine distance
+    /// <summary>
+    ///     Set des variables intiales lorsque le paladin est active
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator Initialise()
+    {   
+        // Incremente le point de partouille et set la position de celui-ci comme 
+        // la destination du paladin
+        posPointPatrouille = patrouillePaladin.GetProchainPos();
+        deplacementPaladin.SetPosCible(posPointPatrouille);
 
-        if (etat == EtatsPaladin.PATROUILLE)
+        // Attendre 
+        while (!deplacementPaladin.GetPathPret())
         {
-            if (deplacementPaladin.GetArrivePosPatrouille())
-            {
-                posPointPatrouille = patrouillePaladin.GetProchainPos();
-                deplacementPaladin.SetPatrouillePos(posPointPatrouille);
-            }
+            yield return null;
         }
 
-        if (visionPaladin.GetJoueurRepere() && etat == EtatsPaladin.PATROUILLE) StartCoroutine(GestionChasse());
+        StartCoroutine(GestionPatrouille());
+
+        yield break;   
     }
 
-    // IEnumerator GestionPatrouille()
-    // {
-    //     while (true)
-    //     {   
-    //         // Lorsque le paladin est arrive a sa position de patrouille
-    //         if (deplacementPaladin.GetArrivePosPatrouille())
-    //         {
-    //             // Appel la methode GetProchainPos de la class PatrouillePaladin pour passer au prochain point de patrouille
-    //             posPointPatrouille = patrouillePaladin.GetProchainPos();
-    //             // Set la destibation 
-    //         }
-    //     }
-    // }
 
-    
+    IEnumerator GestionPatrouille()
+    {
+        // Met a jour l'etat est les contraintes de deplacement
+        etat = EtatsPaladin.PATROUILLE;
+        deplacementPaladin.SetContraintes();
+
+        while (!deplacementPaladin.GetPathPret())
+        {
+            yield return null;
+        }
+
+        while (true)
+        {
+            // Lorsque le paladin est arrive a sa position de patrouille
+            if (deplacementPaladin.GetDistanceCible() < 0.1f)
+            {
+                yield return new WaitForSeconds(3);
+                posPointPatrouille = patrouillePaladin.GetProchainPos();
+                deplacementPaladin.SetPosCible(posPointPatrouille);
+            }
+
+            // Si le joueur se fait repere
+            if (visionPaladin.GetJoueurRepere())
+            {
+                posAlerte = transform.position;
+                // Memorise la position du paladin au moment ou il apercoit le joueur.
+                posAlerte = GetPosAlerte();
+                StartCoroutine(GestionChasse());
+                yield break;
+            }
+            yield return new WaitForSeconds(coroutineFramerate);
+        }
+    }
+
+
     /* ============================= METHODES ============================= */
 
     /// <summary>
@@ -98,14 +114,10 @@ public class PaladinManager : MonoBehaviour
     /// </summary>
     IEnumerator GestionChasse()
     {
-
-        Debug.Log("chase coroutine started");
+        Debug.ClearDeveloperConsole();
         etat = EtatsPaladin.CHASSE;
 
-        posAlerte = transform.position;
-
-        deplacementPaladin.SetVitesseDeplac();
-        deplacementPaladin.SetNavArea();
+        deplacementPaladin.SetContraintes();
 
         /* ================= BOUCLE DE CHASSE DU JOUEUR ================= */
         // Appel le fonction de chasse du joueur tant que celui-ci;
@@ -116,10 +128,27 @@ public class PaladinManager : MonoBehaviour
             yield return new WaitForSeconds(coroutineFramerate);
         }
 
+        // Attendre que le path soit pret
+        while (!deplacementPaladin.GetPathPret())
+        {
+            yield return null;
+        }
 
-        // Une fois le joueur perdu de vue par le paladin 
-        // Demmarage de la coroutine d'inspection et arret de la coroutine en cours
-        Debug.Log("lost player from fov");
+        // Le paladin continue vers le derniere endroit ou il a apercu le joueur pour la derniere fois
+        while (deplacementPaladin.GetDistanceCible() > 3f)
+        {
+            // Si le joueur est de nouveau repere 
+            // Recommence une nouvelle iteration de la coroutine de chasse
+            // Arrete l'instance en cours
+            if (visionPaladin.GetJoueurRepere())
+            {
+                // Debug.Log("spotted again before point");
+                StartCoroutine(GestionChasse());
+                yield break;
+            }
+            yield return new WaitForSeconds(coroutineFramerate);
+        }
+
         StartCoroutine(GestionInspection());
         yield break;
     }
@@ -129,31 +158,17 @@ public class PaladinManager : MonoBehaviour
     /// </summary>
     IEnumerator GestionInspection()
     {
+        // Mise a jour de l'etat du paladin
+        // Mise a jour de ses contraintes de deplacements
         etat = EtatsPaladin.INSPECTION;
-        deplacementPaladin.SetVitesseDeplac();
+        deplacementPaladin.SetContraintes();
 
-        // Attendre que le paladin soit proche de la derniere position connue du joueur
-        while (deplacementPaladin.GetDistanceCible() > 0.5f)
+        // Attendre pendant un certain temps
+        float tempsAttente = 5;
+        while (tempsAttente > 1)
         {
             if (visionPaladin.GetJoueurRepere())
             {
-                Debug.Log("interupted before point");
-                StartCoroutine(GestionChasse());
-                yield break;
-            }
-
-            yield return new WaitForSeconds(coroutineFramerate);
-        }
-
-        // Attendre pendant 10 secondes
-        float tempsAttente = 10;
-        while (tempsAttente > 0)
-        {
-            Debug.Log("remaining wait time : " + tempsAttente);
-
-            if (visionPaladin.GetJoueurRepere())
-            {
-                Debug.Log("wait time interrupted");
                 StartCoroutine(GestionChasse());
                 yield break;
             }
@@ -162,8 +177,35 @@ public class PaladinManager : MonoBehaviour
             yield return new WaitForSeconds(coroutineFramerate);
         }
 
-        Debug.Log("player has been lost");  
+        // Paladin retourne a la position ou il se trouvait au moment de l'alerte
+        deplacementPaladin.SetPosCible(posAlerte);
 
+        // Attendre le calcule du path
+        while (!deplacementPaladin.GetPathPret())
+        {
+            yield return null;
+        }
+
+        while (deplacementPaladin.GetDistanceCible() > 0.1f)
+        {
+            if (visionPaladin.GetJoueurRepere())
+            {
+                StartCoroutine(GestionChasse());
+                yield break;
+            }
+
+            yield return new WaitForSeconds(coroutineFramerate);
+        }
+
+        deplacementPaladin.SetPosCible(posPointPatrouille);
+
+        while (!deplacementPaladin.GetPathPret())
+        {
+            yield return null;
+        }
+
+        StartCoroutine(GestionPatrouille());
+        yield break;
     }
 
 
@@ -174,5 +216,10 @@ public class PaladinManager : MonoBehaviour
     public EtatsPaladin GetEtatPaldin()
     {
         return etat;
+    }
+
+    Vector3 GetPosAlerte()
+    {
+        return transform.position;
     }
 }

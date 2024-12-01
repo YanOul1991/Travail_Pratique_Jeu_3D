@@ -1,100 +1,106 @@
 using UnityEngine;
 using UnityEngine.AI;
 /* 
-    Scripte de gestion des deplacements d'un Paladin :
-        - Gestion des vitesses et des animations
-        - Gestin des rotation selon cible que le paladin va suivre
+    Classe qui possede les methodes permettant de deplacer le paladin qui se deplace grace
+    a un NavMeshAgent component. Classe gere les fonctionalites suivantes: 
+
+        - Vitesse de deplacement;
+        - Modification des area du NavMesh ou le paladin se deplace;
+        - Destination du paladin avec SetDestination();
 
     Par Yanis Oulmane
-    Derniere modification : 04-11-2024
+    Derniere modification : 30-11-2024
  */
+ 
 public class DeplacementPaladin : MonoBehaviour
 {
     /* ================================ VARIABLES ================================ */
-
-    /* --------------- Mouvements --------------- */
     [SerializeField] private float vitesseMarche; // Variable memorisant la vitesse de marche du paladin;
     [SerializeField] private float vitesseCourse; // Variable memorisant la vitesse de course du paladin;\
-
-    /* --------------- Positions --------------- */
-    private GameObject joueur;
-
-    /* ---------- Components / Class ---------- */
-    private PaladinManager paladinManager;
+    private GameObject joueur; // Reference au joueur;
+    private PaladinManager paladinManager; // Reference a la classe PaladinManager
     private NavMeshAgent navAgent; // References au component NavMeshAgent du paladin;
-    private PatrouillePaladin patrouillePaladin; // Reference a la classe PatrouillePaladin;
 
     /* =========================================================================== */
 
     void Start()
     {
         joueur = GameObject.FindWithTag("Player");
-
         // Assigniation des references de components et scripts 
         paladinManager = GetComponent<PaladinManager>();
         navAgent = GetComponent<NavMeshAgent>();
-        patrouillePaladin = GetComponent<PatrouillePaladin>();
-
-        // Assignitations de valeurs par defauts :
-        // Vitesse de deplacement du paladin
-        navAgent.speed = vitesseMarche;
     }
 
     /* ============================== METHODES ============================== */
 
-    public void SetNavArea()
-    {   
-        //  > Descr: 
-        //      Methode qui change le nav area du paladin selon son etat;
-
-        navAgent.areaMask = paladinManager.GetEtatPaldin() switch
-        {
-            PaladinManager.EtatsPaladin.PATROUILLE => 1 << NavMesh.GetAreaFromName("Route"),
-            PaladinManager.EtatsPaladin.INSPECTION => NavMesh.AllAreas,
-            PaladinManager.EtatsPaladin.CHASSE => NavMesh.AllAreas,
-            _ => NavMesh.AllAreas
-        };
-    }
-    public void SetVitesseDeplac()
+    /// <summary>
+    ///     Met a jour les proprietes du NavMeshAgent du paladin en fonction de l'etat dans lequel il se trouve.
+    /// </summary>
+    public void SetContraintes()
     {
-        //  > Descr : 
-        //      Methode qui set la vitesse de deplacement du paladin selon son etat;
+        /* 
+            Propritetes a mettre a jour:
+                - areaMask;
+                - speed;
+                - stoppingDistance;
+        */
 
-        navAgent.speed = paladinManager.GetEtatPaldin() switch
+        switch (paladinManager.GetEtatPaldin())
         {
-            PaladinManager.EtatsPaladin.PATROUILLE => vitesseMarche,
-            PaladinManager.EtatsPaladin.INSPECTION => vitesseMarche,
-            PaladinManager.EtatsPaladin.CHASSE => vitesseCourse,
-            _ => vitesseMarche
-        };
+            case PaladinManager.EtatsPaladin.PATROUILLE:
+                navAgent.areaMask = 1 << NavMesh.GetAreaFromName("Route");
+                navAgent.speed = vitesseMarche;
+                navAgent.stoppingDistance = 0;
+                break;
+
+            case PaladinManager.EtatsPaladin.INSPECTION:
+                navAgent.areaMask = NavMesh.AllAreas;
+                navAgent.speed = vitesseMarche;
+                navAgent.stoppingDistance = 0;
+                break;
+                
+            case PaladinManager.EtatsPaladin.CHASSE:
+                navAgent.areaMask = NavMesh.AllAreas;
+                navAgent.speed = vitesseCourse;
+                navAgent.stoppingDistance = 1f;
+                break;
+        }
     }
 
+    /// <summary>
+    ///     Set la destination du NavMashAgent a la position du joueur
+    /// </summary>
     public void SetChasserJoueur()
     {
         navAgent.SetDestination(joueur.transform.position);
     }
 
-    public void SetPatrouillePos(Vector3 posPointPatrouille)
+    /// <summary>
+    ///     Set la destination du NavMeshAgent a la position du point de patrouille.
+    /// </summary>
+    /// <param name="position"> Position du point de patrouille </param>
+    public void SetPosCible(Vector3 position)
     {
-        navAgent.SetDestination(posPointPatrouille);
+        navAgent.SetDestination(position);
     }
 
     /// <summary>
-    ///     Methode qui verifie si le paladin est arrive a la destination de sa patrouille.
+    ///    Retourne la distance entre le paladin et la destination du NavMeshAgent.
     /// </summary>
-    /// <returns>Retourne true si le paladin est arrive a destination. Sinon retourne false.</returns>
-    public bool GetArrivePosPatrouille()
-    {   
-        return navAgent.remainingDistance < 0.2f;
-    }
-
-    /// <summary>
-    ///     Methode qui retourne la distance restante de la destination actuel de son component NavMeshAgent;
-    /// </summary>
-    /// <returns> float </returns>
+    /// <returns>Distance restante</returns>
     public float GetDistanceCible()
     {
         return navAgent.remainingDistance;
+    }
+
+    /// <summary>
+    ///     Verfie si le path du nav mesh agent est pret, en verifiant les parametres pathPending et pathStatus du
+    ///     NavMeshAgent.
+    /// </summary>
+    /// <returns>Si le path est pret retourne true. Sinon retourne false</returns>
+    public bool GetPathPret()
+    {
+        return !navAgent.pathPending && navAgent.pathStatus == NavMeshPathStatus.PathComplete;
     }
 }
 
