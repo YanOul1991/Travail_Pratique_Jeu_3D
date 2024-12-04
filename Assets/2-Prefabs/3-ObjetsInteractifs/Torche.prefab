@@ -138,7 +138,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 5
+  m_Radius: 6.5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!108 &47366045389308829
 Light:
@@ -150,9 +150,9 @@ Light:
   m_Enabled: 1
   serializedVersion: 11
   m_Type: 2
-  m_Color: {r: 1, g: 0.70899, b: 0.34905648, a: 1}
+  m_Color: {r: 1, g: 0.56952035, b: 0.2688679, a: 1}
   m_Intensity: 4
-  m_Range: 5
+  m_Range: 7
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -163,7 +163,7 @@ Light:
     m_Strength: 1
     m_Bias: 0.05
     m_NormalBias: 0.4
-    m_NearPlane: 0.05
+    m_NearPlane: 0.07
     m_CullingMatrixOverride:
       e00: 1
       e01: 0

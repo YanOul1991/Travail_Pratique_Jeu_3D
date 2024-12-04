@@ -14,10 +14,9 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         // Verouillage de la souris au centre de l'ecran
+        // et du framerate du jeu
         Cursor.lockState = CursorLockMode.Locked;
-        
         Application.targetFrameRate = 60;
     }
 }

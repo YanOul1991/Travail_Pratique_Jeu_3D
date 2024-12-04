@@ -48,7 +48,6 @@ public class DeplacementErika : MonoBehaviour
     // Fonction Update() gere les Inputs du joueurs et les etats du personnage  
     void Update()
     {
-
         /* ======================= ENVOIT INFOS IMPORTANTES AU GAMEMANAGER ======================= */
         /* 
             - Etat cache/visible
