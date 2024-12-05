@@ -86,7 +86,7 @@ public class PaladinManager : MonoBehaviour
         while (true)
         {
             // Lorsque le paladin est arrive a sa position de patrouille
-            if (deplacementPaladin.GetDistanceCible() < 0.1f)
+            if (deplacementPaladin.GetDistanceCible() < 0.2f)
             {
                 yield return new WaitForSeconds(3);
                 posPointPatrouille = patrouillePaladin.GetProchainPos();
