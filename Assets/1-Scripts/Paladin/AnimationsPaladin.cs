@@ -4,15 +4,14 @@ using UnityEngine.AI;
 public class AnimationsPaladin : MonoBehaviour
 {
     [SerializeField] float porteeAttaque;
-    Animator animatorComp; // Raccourci au component Animator du GameObject Paladin
-    VisionPaladin visionPaladin; // Reference a la classe VisionPaladin
-    NavMeshAgent navAgent; // Reference au componentn NavMeshAgent du paladin
+    Animator animatorComp; // Raccourci au component Animator du GameObject Paladin;
+    NavMeshAgent navAgent; // Reference au componentn NavMeshAgent du paladin;
+    [SerializeField] AnimationClip animationAttaque; // Reference au clip d'animation d'attaque du paladin;
 
     void Start()
     {
         // Assignitation des references aux components et scriptes
         animatorComp = GetComponent<Animator>();
-        visionPaladin = GetComponent<VisionPaladin>();
         navAgent = GetComponent<NavMeshAgent>();
     }
 
@@ -22,26 +21,21 @@ public class AnimationsPaladin : MonoBehaviour
         animatorComp.SetFloat("vitesse", navAgent.velocity.magnitude);
     }
 
-    // Fonction publique qui gere les animations d'attaque
-    public void AnimationAttaque()
+    
+    /// <summary>
+    ///     Set le parametre trigger "attaque" du l'animator du paladin pour jouer l'animation d'attaque;
+    /// </summary>
+    public void SetAnimAttaqueTrigger()
     {   
-        animatorComp.SetBool("attk", GetAnimAttaque(visionPaladin.GetJoueurRepere(), GameManager.joueurDansOmbre, GameManager.joueurVivant));
+        animatorComp.SetTrigger("attaque");
     }
 
     /// <summary>
-    /// Methode qui verifie si les conditions pour jouer l'animation d'attaque sont respectes.
+    ///     Retourne la duree totale de l'animation d'attaque du Paladin en secondes.
     /// </summary>
-    /// <param name="lesConditions"></param>
-    /// <returns>Bool</returns>
-    bool GetAnimAttaque(params bool[] lesConditions)
+    /// <returns>Duree de l'animation d'attaque/returns>
+    public float GetAnimAttaqueDuree()
     {
-        foreach (bool condition in lesConditions)
-        {
-            if (!condition)
-            {
-                return false;
-            }
-        }
-        return true;
+        return animationAttaque.length;
     }
 }

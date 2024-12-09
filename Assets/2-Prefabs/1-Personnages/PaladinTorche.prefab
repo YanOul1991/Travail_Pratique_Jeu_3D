@@ -348,6 +348,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   distanceDetectionMax: 75
   coroutineFramerate: 30
+  colliderEpee: {fileID: 3382550349736174071}
 --- !u!114 &2112819683635995625
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -375,6 +376,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   porteeAttaque: 3
+  animationAttaque: {fileID: -203655887218126122, guid: 6b0e7c387504c4240bf8a6e031c2dd80, type: 3}
 --- !u!114 &1431873608172823517
 MonoBehaviour:
   m_ObjectHideFlags: 0

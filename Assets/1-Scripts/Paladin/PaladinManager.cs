@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.AI;
 
 /* 
     Classe de gestion du paladin:
@@ -13,6 +14,7 @@ public class PaladinManager : MonoBehaviour
     /* Variables globales */
     [SerializeField] private float distanceDetectionMax;
     [SerializeField] private float coroutineFramerate; // Frame rate des coroutine de gestion des etats du paladin
+    [SerializeField] private GameObject colliderEpee; // GameObject qui contient le collider de l'epee du paladin
 
     /* --------------- References GameObject / Classes --------------- */
     private GameObject joueur;
@@ -46,6 +48,8 @@ public class PaladinManager : MonoBehaviour
         /* ``````````````````` Assigne le frame rate ``````````````````` */
         coroutineFramerate = 1 / coroutineFramerate;
 
+        colliderEpee.SetActive(false);
+
         StartCoroutine(Initialise());
     }
 
@@ -54,7 +58,7 @@ public class PaladinManager : MonoBehaviour
     /// </summary>
     /// <returns></returns>
     IEnumerator Initialise()
-    {   
+    {
         // Incremente le point de partouille et set la position de celui-ci comme 
         // la destination du paladin
         posPointPatrouille = patrouillePaladin.GetProchainPos();
@@ -68,7 +72,7 @@ public class PaladinManager : MonoBehaviour
 
         StartCoroutine(GestionPatrouille());
 
-        yield break;   
+        yield break;
     }
 
 
@@ -125,9 +129,17 @@ public class PaladinManager : MonoBehaviour
         while (visionPaladin.GetJoueurRepere())
         {
             deplacementPaladin.SetChasserJoueur();
+
+            // Si le paladin est a moins de 1m du joueur trigger l'animation d'attaque
+            if (deplacementPaladin.GetDistanceCible() < 1.5f)
+            {
+                SetAttaque();
+            }
+
             yield return new WaitForSeconds(coroutineFramerate);
         }
 
+        // Apres que le paladin perd le joueur de vue
         // Attendre que le path soit pret
         while (!deplacementPaladin.GetPathPret())
         {
@@ -221,5 +233,31 @@ public class PaladinManager : MonoBehaviour
     Vector3 GetPosAlerte()
     {
         return transform.position;
+    }
+
+    /// <summary>
+    ///     Gere les propreietes du paladin lorsque celui-ci passe en mode attaque
+    /// </summary>
+    private void SetAttaque()
+    {   
+        // Le paladin est immobile quand il attaque
+        GetComponent<NavMeshAgent>().speed = 0;
+        // Active le collider
+        colliderEpee.SetActive(true);
+        animationsPaladin.SetAnimAttaqueTrigger();
+
+        // Appel la methode qui retourne le paladin a ses proprietes normales apres
+        // qu'il termine son attaque
+        Invoke(nameof(SetAttaqueFin), animationsPaladin.GetAnimAttaqueDuree());
+    }
+
+    /// <summary>
+    ///     Retourne les proprietes de paladin a leur etat normales apres la fin de l'attaque de celui-ci
+    /// </summary>
+    private void SetAttaqueFin()
+    {
+        Debug.Log("Attaque pret");
+        colliderEpee.SetActive(false);
+        deplacementPaladin.SetContraintes();
     }
 }

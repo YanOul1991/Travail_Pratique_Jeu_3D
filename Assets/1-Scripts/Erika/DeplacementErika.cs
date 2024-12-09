@@ -29,7 +29,6 @@ public class DeplacementErika : MonoBehaviour
     [SerializeField] bool estCache = false; // Bool memorisant si le personnage est cache
     [SerializeField] bool estVivant = true; // Bool memorisant si le personnag est mort
 
-
     /* =================== REFERENCES AUX COMPONENTS =================== */
     CharacterController controleur;
     Animator animator;
@@ -53,7 +52,7 @@ public class DeplacementErika : MonoBehaviour
             - Etat cache/visible
             - Etat mort/vivant
         */
-        GameManager.joueurDansOmbre = estCache;
+        GameManager.joueurCache = estCache;
         GameManager.joueurVivant = estVivant;
 
         /* ================================ INPUTS DEPLACEMENT/SAUTS ================================ */
@@ -184,5 +183,10 @@ public class DeplacementErika : MonoBehaviour
         deplacementSol.y = 0;
 
         animator.SetFloat("vitesse", deplacementSol.magnitude);
+    }
+
+    public bool GetJoueurCache()
+    {
+        return estCache;
     }
 }

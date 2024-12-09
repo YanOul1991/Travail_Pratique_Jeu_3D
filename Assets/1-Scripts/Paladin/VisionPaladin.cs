@@ -41,7 +41,7 @@ public class VisionPaladin : MonoBehaviour
 
         if (Physics.Raycast(leRay, out RaycastHit hitInfo, distanceMax, lesLayers))
         {
-            if (hitInfo.transform == cible && !GameManager.joueurDansOmbre) return true;
+            if (hitInfo.transform == cible && !GameManager.joueurCache) return true;
         }
 
         return false;

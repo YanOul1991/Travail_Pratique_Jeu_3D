@@ -38,12 +38,10 @@ public class DeplacementPaladin : MonoBehaviour
     /// </summary>
     public void SetContraintes()
     {
-        /* 
-            Propritetes a mettre a jour:
-                - areaMask;
-                - speed;
-                - stoppingDistance;
-        */
+        // Proprietes du NavMeshAgent a mettre a jour :
+        //      - areaMAsk;
+        //      - speed;
+        //      - stoppingDistance;
 
         switch (paladinManager.GetEtatPaldin())
         {
@@ -99,7 +97,11 @@ public class DeplacementPaladin : MonoBehaviour
     /// </summary>
     /// <returns>Si le path est pret retourne true. Sinon retourne false</returns>
     public bool GetPathPret()
-    {
+    {   
+        // Methode s'assure que tout les parametres du navMash et de son deplacement soient pret
+        // pour eviter d'avoir des valeurs qui ne fonctionnnent pas
+        // comme le parametre remainingDistance du NavMeshAgent qui prend quelques ms de plus a etre calcule
+        // et qui parfois retourne 0 alors que la destination se trouve plus loin.
         return !navAgent.pathPending && navAgent.pathStatus == NavMeshPathStatus.PathComplete;
     }
 }
