@@ -129,6 +129,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 47366045389308829, guid: a0aba837c9b1d50429ce4ad040287590, type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 47366045389308829, guid: a0aba837c9b1d50429ce4ad040287590, type: 3}
       propertyPath: m_Shadows.m_Strength
       value: 0.216
       objectReference: {fileID: 0}
@@ -142,11 +146,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6727845261851080963, guid: a0aba837c9b1d50429ce4ad040287590, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.034
+      value: -0.226
       objectReference: {fileID: 0}
     - target: {fileID: 6727845261851080963, guid: a0aba837c9b1d50429ce4ad040287590, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.111
+      value: 0.112
       objectReference: {fileID: 0}
     - target: {fileID: 6727845261851080963, guid: a0aba837c9b1d50429ce4ad040287590, type: 3}
       propertyPath: m_LocalPosition.z

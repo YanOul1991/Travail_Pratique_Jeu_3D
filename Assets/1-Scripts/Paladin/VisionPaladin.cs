@@ -41,6 +41,8 @@ public class VisionPaladin : MonoBehaviour
 
         if (Physics.Raycast(leRay, out RaycastHit hitInfo, distanceMax, lesLayers))
         {
+            // Debug.DrawRay(leRay.origin, leRay.direction * Vector3.Distance(leRay.origin, hitInfo.point), Color.yellow);
+
             if (hitInfo.transform == cible && !GameManager.joueurCache) return true;
         }
 

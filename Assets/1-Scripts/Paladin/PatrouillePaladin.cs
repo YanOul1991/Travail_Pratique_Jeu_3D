@@ -42,7 +42,7 @@ public class PatrouillePaladin : MonoBehaviour
             positions[i] = lesPoints.transform.GetChild(i).transform.position;
         }
 
-        Destroy(lesPoints);
+        // Destroy(lesPoints);
 
         positions[0] = transform.position;
     }

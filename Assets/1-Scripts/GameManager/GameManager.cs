@@ -25,8 +25,6 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Application.targetFrameRate = 60;
         // joueur = GameObject.FindWithTag("Player");
-        // joueurClass = joueur.GetComponent<DeplacementErika>() ;
-
-        Debug.Log(SceneManager.GetActiveScene().buildIndex);
+        // joueurClass = joueur.GetComponent<DeplacementErika>() 
     }
 }
