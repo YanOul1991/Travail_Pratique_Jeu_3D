@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 /* 
     Scripte de gestions des fonctionalites globales du jeu :
@@ -18,13 +17,17 @@ public class GameManager : MonoBehaviour
     static public bool joueurVivant = true;
     
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         // Verouillage de la souris au centre de l'ecran
         // et du framerate du jeu
         Cursor.lockState = CursorLockMode.Locked;
+
+        // Lergere optimisation en limitant le refresh rate pour eviter les tentatives de 900fps
+        QualitySettings.vSyncCount = 0;
+        QualitySettings.SetQualityLevel(3);
+        QualitySettings.softParticles = false;
         Application.targetFrameRate = 60;
-        // joueur = GameObject.FindWithTag("Player");
-        // joueurClass = joueur.GetComponent<DeplacementErika>() 
+
     }
 }

@@ -93,7 +93,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 20201, guid: 0000000000000000f000000000000000, type: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 1abb8eaa1a18a9345bfcee9a38192604, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -25052,7 +25052,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1227196489
 Transform:
   m_ObjectHideFlags: 0
@@ -26167,6 +26167,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   etatCacheUI: {fileID: 1670727286}
+  fps: {fileID: 528280254}
   framerateUI: 2
 --- !u!114 &1279774108
 MonoBehaviour:
@@ -28745,7 +28746,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cible: {fileID: 1811480169}
   pivotCam: {fileID: 2062532717}
-  distanceCamera: 10
+  distanceCamera: 8
 --- !u!81 &1398530657
 AudioListener:
   m_ObjectHideFlags: 0
@@ -30183,7 +30184,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1452919515
 Transform:
   m_ObjectHideFlags: 0
@@ -37766,7 +37767,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1778444547
 Transform:
   m_ObjectHideFlags: 0
@@ -45662,7 +45663,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2134050741
 Transform:
   m_ObjectHideFlags: 0

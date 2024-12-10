@@ -37,7 +37,6 @@ public class PaladinManager : MonoBehaviour
 
     void Start()
     {
-
         /* ```````````````` Assigniation des references ```````````````` */
         joueur = GameObject.FindWithTag("Player");
         deplacementPaladin = GetComponent<DeplacementPaladin>();

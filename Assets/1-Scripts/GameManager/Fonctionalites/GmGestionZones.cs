@@ -23,14 +23,30 @@ public class GmGestionZones : MonoBehaviour
         // Debug.Log(pointsZone.Length);
         // Debug.Log(zonesPaladin.Length);
         // Debug.Log(zonesEnvironnement.Length);
+
+        StartCoroutine(VerificationZone());
     }
 
-    IEnumerator VerificationZone() 
+    IEnumerator VerificationZone()
     {
         while (true)
         {
+            for (int i = 0; i < pointsZone.Length; i++)
+            {
+                if (Vector3.Distance(pointsZone[i].position, joueur.position) < distance)
+                {
+                    zonesPaladin[i].SetActive(true);
+                    zonesEnvironnement[i].SetActive(true);
+                }
+                else
+                {
+                    zonesPaladin[i].SetActive(false);
+                    zonesEnvironnement[i].SetActive(false);
+                }
+            }
+
             yield return new WaitForSeconds(1);
         }
     }
-    
+
 }
