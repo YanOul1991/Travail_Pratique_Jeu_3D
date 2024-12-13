@@ -2,6 +2,16 @@ using UnityEngine;
 using System.Collections;
 using TMPro;
 
+/* 
+    Class de gestion du UI dans le jeu :
+        - Affiche l'etat cache/visible du joueur en temps reel;
+        - Gerer avec un coroutine infinie;
+        - Framerate de la coroutine plus lent -> optimisation;
+
+    Par: Yanis Oulmane;
+    Derniere modification: 12/12/2024;
+*/
+
 public class gmGestionUI : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI etatCacheUI; // Reference au UI affichant l'etat du joueur;
@@ -12,6 +22,7 @@ public class gmGestionUI : MonoBehaviour
         // Frame rate du UI est automatiquement de 5 si un valeur non autorise est donne.
         if(framerateUI <= 0) framerateUI = 5;
 
+        // Demmarage de la coroutine de Gestion du UI
         StartCoroutine(GestionUI());
     }
     

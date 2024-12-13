@@ -2,9 +2,10 @@ using UnityEngine;
 
 /* 
     Scripte de gestion des visions des paladin : 
-        - Gestion champ de vision (FOV)
-    Par Yanis Oulmane
-    Derniere modification : 02-12-2024
+        - Gestion champ de vision (FOV);
+
+    Par: Yanis Oulmane;
+    Derniere modification : 10/12/2024;
  */
 
 public class VisionPaladin : MonoBehaviour
@@ -31,8 +32,6 @@ public class VisionPaladin : MonoBehaviour
     /// </returns>
     public bool GetJoueurRepere()
     {   
-        // Si le joueur est trop loin ou qu'il n'est pas dans le 
-        // champ de vision, retourne tout de suite false.
         if (!GameManager.joueurVivant) return false;
         if (Vector3.Distance(transform.position, cible.transform.position) > distanceMax) return false;
         if (Vector3.Angle(cible.transform.position - transform.position, transform.forward) > champVision/2) return false;

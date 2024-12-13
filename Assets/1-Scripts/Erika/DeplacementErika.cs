@@ -2,11 +2,12 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 /* 
     Script des gestion des deplacements du joueur ayant les fonctionalites suivantes : 
-        - Gestion des etats du joueur (cache/visible, vivant/mort, etc.) et partage ces information avec le gamemanager
-        - Gestion des etats physiques du personnages tels que debout/accroupi et marche/sprint
-        - Gestion des vitesses de deplacement selon l'etat du physique du personnage
-        - Gestion des sauts
-        - Gestion des animations du personnage selons les etats *** TEMPORAIRE -> SERA DEPLACE DANS UN AUTRES SCRIPTE ***
+        - Gestion des etats du joueur (cache/visible, vivant/mort, etc.) et partage ces information avec le gamemanager;
+        - Gestion des etats physiques du personnages tels que debout/accroupi et marche/sprint;
+        - Gestion des vitesses de deplacement selon l'etat du physique du personnage;
+        - Gestion des sauts;
+        - Gestion des animations du personnage selons les etats;
+        - Gestion des collisions;
 
     Par : Yanis Oulmane
     Derniere modification : 06/11/2024
@@ -24,13 +25,15 @@ public class DeplacementErika : MonoBehaviour
     float mouvVertical; // Variable memorisant la Velocite en Y du personnage
     float velociteY; // Variable memorisant la velocite Y du joueur en temps reel;
     bool auSol; // Bool memorisant si le personnage touche au sol
-    [SerializeField] bool estCache = false; // Bool memorisant si le personnage est cache
+    [SerializeField] bool estCache; // Bool memorisant si le personnage est cache
     [SerializeField] bool estVivant = true; // Bool memorisant si le personnag est mort
-    CharacterController controleur;
-    Animator animator;
 
     [SerializeField] AudioClip sonDeplacement; // Son de bruit de pas du personnage
     [SerializeField] AudioClip sonEpee; // Son de l'epee quand le personnage se fait touche
+
+    /* References aux autres classes du personnage */
+    CharacterController controleur;
+    Animator animator;
     AudioSource audioSource;
 
     // Start is called before the first frame update
@@ -48,16 +51,10 @@ public class DeplacementErika : MonoBehaviour
     // Fonction Update() gere les Inputs du joueurs et les etats du personnage  
     void Update()
     {
-        /* ======================= ENVOIT INFOS IMPORTANTES AU GAMEMANAGER ======================= */
-        /* 
-            - Etat cache/visible
-            - Etat mort/vivant
-        */
         GameManager.joueurCache = estCache;
         GameManager.joueurVivant = estVivant;
 
-        /* ================================ INPUTS DEPLACEMENT/SAUTS ================================ */
-
+        // Ecoute les inputs du joueur seulment si il est en vie;
         if (estVivant)
         {
             // Si le joueur appuit sur la 'espace' et qu'il est au sol
@@ -144,6 +141,8 @@ public class DeplacementErika : MonoBehaviour
         // Gestion des bruits de pas du joueur
         float deplacementSol = new Vector3(mouvRelatif.x, 0, mouvRelatif.z).magnitude;
 
+        // Modification des sons de bruit de pas du joueur
+        // selon si il est au sol et la magnitude de son deplacement au sol
         if (estVivant)
         {
             if (!auSol || deplacementSol < 1)

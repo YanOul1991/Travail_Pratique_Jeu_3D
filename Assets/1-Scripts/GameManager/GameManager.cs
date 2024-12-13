@@ -3,16 +3,15 @@ using UnityEngine;
 /* 
     Scripte de gestions des fonctionalites globales du jeu :
         - Memoriser les etats du joueurs
-    
+        - Mini optimisation de la performance du GPU
+
     Par Yanis Oulmane
-    Derniere modification : 06/11/2024
+    Derniere modification : 12/12/2024
 */
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    // private GameObject joueur;
-    // private DeplacementErika joueurClass; // Reference a la class du joueur
     static public bool joueurCache = true;
     static public bool joueurVivant = true;
 
@@ -23,11 +22,10 @@ public class GameManager : MonoBehaviour
         // et du framerate du jeu
         Cursor.lockState = CursorLockMode.Locked;
 
-        // Lergere optimisation en limitant le refresh rate pour eviter les tentatives de 900fps
+        // Optimisation en limitant le refresh rate a 60fps et changeant la qualite des graphismes
+        // pour eviter d'en demander trop au GPU pour rien
         QualitySettings.vSyncCount = 0;
-        QualitySettings.SetQualityLevel(3);
-        QualitySettings.softParticles = false;
         Application.targetFrameRate = 60;
-
+        QualitySettings.SetQualityLevel(3);
     }
 }
