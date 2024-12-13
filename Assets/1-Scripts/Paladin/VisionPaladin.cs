@@ -33,7 +33,7 @@ public class VisionPaladin : MonoBehaviour
     {   
         // Si le joueur est trop loin ou qu'il n'est pas dans le 
         // champ de vision, retourne tout de suite false.
-
+        if (!GameManager.joueurVivant) return false;
         if (Vector3.Distance(transform.position, cible.transform.position) > distanceMax) return false;
         if (Vector3.Angle(cible.transform.position - transform.position, transform.forward) > champVision/2) return false;
 

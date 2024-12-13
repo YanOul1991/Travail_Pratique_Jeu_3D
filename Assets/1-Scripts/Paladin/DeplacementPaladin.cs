@@ -29,6 +29,8 @@ public class DeplacementPaladin : MonoBehaviour
         // Assigniation des references de components et scripts 
         paladinManager = GetComponent<PaladinManager>();
         navAgent = GetComponent<NavMeshAgent>();
+
+        InvokeRepeating(nameof(SetSonsDeplacement), 0, 0.15f);
     }
 
     /* ============================== METHODES ============================== */
@@ -62,6 +64,19 @@ public class DeplacementPaladin : MonoBehaviour
                 navAgent.speed = vitesseCourse;
                 navAgent.stoppingDistance = 1f;
                 break;
+        }
+    }
+
+    void SetSonsDeplacement()
+    {
+        if (navAgent.speed < 1)
+        {
+            GetComponent<AudioSource>().volume = 0;
+        }
+        else
+        {
+            GetComponent<AudioSource>().volume = 0.2f;
+            GetComponent<AudioSource>().pitch = navAgent.speed == vitesseMarche ? 1 : 1.75f;
         }
     }
 

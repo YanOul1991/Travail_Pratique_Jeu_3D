@@ -12,7 +12,10 @@ EditorBuildSettings:
     path: Assets/3-Scenes/Jeu.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
-    path: Assets/3-Scenes/Fin.unity
-    guid: 2b9914e6c39fc904db9370e0f82d656a
+    path: Assets/3-Scenes/FinVictoire.unity
+    guid: f31859ee391b4d74489ad35e6f9b13c0
+  - enabled: 1
+    path: Assets/3-Scenes/FinDefaite.unity
+    guid: 27c751a44d3039b48a940cbdf59478e3
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

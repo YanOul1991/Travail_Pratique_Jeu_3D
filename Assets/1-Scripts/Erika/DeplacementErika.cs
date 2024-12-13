@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 /* 
     Script des gestion des deplacements du joueur ayant les fonctionalites suivantes : 
         - Gestion des etats du joueur (cache/visible, vivant/mort, etc.) et partage ces information avec le gamemanager
@@ -12,7 +13,6 @@ using UnityEngine;
  */
 public class DeplacementErika : MonoBehaviour
 {
-    /* ================= VARIABLES DEPLACEMENTS/SAUTS ================= */
     [SerializeField] float vitesseMarche; // Vitesse du deplacement de type marche
     [SerializeField] float vitesseSprint; // Vitesse du deplacement de type sprint
     [SerializeField] float vitesseAccroupi; // Vitesse du deplacement lorsque le joueur est en etat accroupi
@@ -24,14 +24,14 @@ public class DeplacementErika : MonoBehaviour
     float mouvVertical; // Variable memorisant la Velocite en Y du personnage
     float velociteY; // Variable memorisant la velocite Y du joueur en temps reel;
     bool auSol; // Bool memorisant si le personnage touche au sol
-
-    /* ===================  VARIABLES ETAT PERSONNAGE ===================  */
     [SerializeField] bool estCache = false; // Bool memorisant si le personnage est cache
     [SerializeField] bool estVivant = true; // Bool memorisant si le personnag est mort
-
-    /* =================== REFERENCES AUX COMPONENTS =================== */
     CharacterController controleur;
     Animator animator;
+
+    [SerializeField] AudioClip sonDeplacement; // Son de bruit de pas du personnage
+    [SerializeField] AudioClip sonEpee; // Son de l'epee quand le personnage se fait touche
+    AudioSource audioSource;
 
     // Start is called before the first frame update
     void Start()
@@ -39,6 +39,7 @@ public class DeplacementErika : MonoBehaviour
         // Assigniation des references aux components
         controleur = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
 
         // Assigniation de valeurs par defaut
         estCache = true;
@@ -135,10 +136,36 @@ public class DeplacementErika : MonoBehaviour
         mouvRelatif.y = velociteY;
 
         // Applique le mouvement au personnage avec la methode Move() de son compoenent CharacterController
-        controleur.Move(mouvRelatif * Time.deltaTime);
+        controleur.Move(mouvRelatif * Time.deltaTime );  
 
         // Envoit le vecteur mouvement relatif a la fonction de gestion des animations
         GestionAnimations(mouvRelatif);
+
+        // Gestion des bruits de pas du joueur
+        float deplacementSol = new Vector3(mouvRelatif.x, 0, mouvRelatif.z).magnitude;
+
+        if (estVivant)
+        {
+            if (!auSol || deplacementSol < 1)
+            {
+                // Si n'est pas au sol, il ne fait aucun bruit de pas
+                audioSource.volume = 0;
+            }
+            else
+            {
+
+                if (deplacementSol < vitesseSprint)
+                {
+                    audioSource.volume = 0.5f;
+                    audioSource.pitch = 0.8f;
+                }
+                else
+                {
+                    audioSource.volume = 0.9f;
+                    audioSource.pitch = 1.85f;
+                }
+            }
+        }
     }
 
     void OnTriggerEnter(Collider collision)
@@ -150,6 +177,19 @@ public class DeplacementErika : MonoBehaviour
             estVivant = false;
 
             animator.SetTrigger("mortTrigger");
+
+            audioSource.resource = null;
+            audioSource.volume = 1;
+            audioSource.pitch = 1;
+            audioSource.PlayOneShot(sonEpee);
+
+            SceneManager.LoadScene(3);
+        }
+
+        if (collision.gameObject.CompareTag("Finish"))
+        {
+            Debug.Log("Victoire");
+            SceneManager.LoadScene(2);
         }
     }
 

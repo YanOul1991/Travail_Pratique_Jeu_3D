@@ -255,7 +255,6 @@ public class PaladinManager : MonoBehaviour
     /// </summary>
     private void SetAttaqueFin()
     {
-        Debug.Log("Attaque pret");
         colliderEpee.SetActive(false);
         deplacementPaladin.SetContraintes();
     }

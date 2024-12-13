@@ -5,7 +5,6 @@ using TMPro;
 public class gmGestionUI : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI etatCacheUI; // Reference au UI affichant l'etat du joueur;
-    [SerializeField] TextMeshProUGUI fps; // Reference au UI affichant l'etat du joueur;
     [SerializeField] int framerateUI; // Framerate avec lequel le UI se fera mettre a jour a chaque seconde (1/framerateUI);
 
     void Start()
@@ -25,7 +24,7 @@ public class gmGestionUI : MonoBehaviour
             if (GameManager.joueurCache)
             {
                 // Affiche le le joueur n'est pas visible
-                etatCacheUI.text = "cache";
+                etatCacheUI.text = "CACHÉ";
                 etatCacheUI.color = Color.white;
             }
             else
