@@ -136,7 +136,7 @@ public class DeplacementErika : MonoBehaviour
         mouvRelatif.y = velociteY;
 
         // Applique le mouvement au personnage avec la methode Move() de son compoenent CharacterController
-        controleur.Move(mouvRelatif * Time.deltaTime );  
+        controleur.Move(mouvRelatif * Time.deltaTime);
 
         // Envoit le vecteur mouvement relatif a la fonction de gestion des animations
         GestionAnimations(mouvRelatif);
@@ -183,12 +183,11 @@ public class DeplacementErika : MonoBehaviour
             audioSource.pitch = 1;
             audioSource.PlayOneShot(sonEpee);
 
-            SceneManager.LoadScene(3);
+            Invoke(nameof(SetSceneDefaite), 3f);
         }
 
         if (collision.gameObject.CompareTag("Finish"))
         {
-            Debug.Log("Victoire");
             SceneManager.LoadScene(2);
         }
     }
@@ -228,5 +227,10 @@ public class DeplacementErika : MonoBehaviour
     public bool GetJoueurCache()
     {
         return estCache;
+    }
+
+    void SetSceneDefaite()
+    {
+        SceneManager.LoadScene(3);
     }
 }

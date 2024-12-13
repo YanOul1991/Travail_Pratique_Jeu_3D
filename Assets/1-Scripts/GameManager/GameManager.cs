@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     // private DeplacementErika joueurClass; // Reference a la class du joueur
     static public bool joueurCache = true;
     static public bool joueurVivant = true;
-    
+
     // Start is called before the first frame update
     void Awake()
     {

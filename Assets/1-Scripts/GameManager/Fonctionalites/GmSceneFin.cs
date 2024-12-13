@@ -16,9 +16,9 @@ public class GmSceneFin : MonoBehaviour
     {
         SceneManager.LoadScene(0);
     }
-
-    // public void SetQuitter()
-    // {
-    //     Application.Quit();
-    // }
+    
+    public void SetQuitter()
+    {
+        Application.Quit();
+    }
 }

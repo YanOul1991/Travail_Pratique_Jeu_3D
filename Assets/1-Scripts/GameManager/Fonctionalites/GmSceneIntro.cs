@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 public class GmSceneIntro : MonoBehaviour
@@ -14,6 +15,8 @@ public class GmSceneIntro : MonoBehaviour
 
     void Start()
     {
+        Application.targetFrameRate = 60;
+        QualitySettings.vSyncCount = 0;
         Cursor.lockState = CursorLockMode.Confined;
         
         // Etats defaut de la camera
@@ -32,6 +35,11 @@ public class GmSceneIntro : MonoBehaviour
     {
         // Commence le jeu
         SceneManager.LoadScene(1);
+    }
+
+    public void SetQuitter()
+    {
+        Application.Quit();
     }
 
     IEnumerator GestionAffichage(int i)

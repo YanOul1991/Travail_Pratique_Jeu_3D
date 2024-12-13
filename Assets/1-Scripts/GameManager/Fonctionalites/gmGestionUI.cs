@@ -14,7 +14,7 @@ public class gmGestionUI : MonoBehaviour
 
         StartCoroutine(GestionUI());
     }
-
+    
     public IEnumerator GestionUI()
     {
         // Verifie les etats du joueur pour le UI a un certain framerate
